@@ -14,7 +14,7 @@ class Reservation(models.Model):
         POTVRDENA = "POTVRDENA", "Potvrdená"
         ZAMIETNUTA = "ZAMIETNUTA", "Zamietnutá"
 
-    uuid_identificator = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid_identificator = models.UUIDField(default=uuid.uuid4)
     meno = models.CharField(max_length=255)
     priezvisko = models.CharField(max_length=255)
     pocet_ludi = models.PositiveIntegerField(default=2, validators=[MinValueValidator(1), MaxValueValidator(45)], verbose_name="Počet ľudí")
