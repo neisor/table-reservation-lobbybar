@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Rezervácia</h1>
+
+    <div class="container-fluid">
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+        {% load crispy_forms_tags %}
+        <form action="{% url 'create_new_reservation' %}" id="create_new_reservation_form" method="POST" enctype="multipart/form-data">
+            {% crispy form %}
+        </form>
+        <button class="btn btn-success mt-3" type="submit" form="create_new_reservation_form">Vytvoriť novú rezerváciu</button>
+    </div>
+
+{% endblock %}
