@@ -129,3 +129,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# Email setup
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = "marin-test@zerumone.sk"
+EMAIL_HOST_USER = "marin-test@zerumone.sk"
+EMAIL_HOST_PASSWORD = "M4riNT3sT"
+EMAIL_HOST = "smtp.websupport.sk"
+EMAIL_PORT = "465"
+EMAIL_USE_SSL = True
