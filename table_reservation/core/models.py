@@ -1,8 +1,7 @@
-from tabnanny import verbose
 from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 import uuid
-from core.validators import future_datetime_only
+from core.validators import future_date_only
 
 class Reservation(models.Model):
     """Model for reservations"""
@@ -19,7 +18,8 @@ class Reservation(models.Model):
     meno = models.CharField(max_length=255)
     priezvisko = models.CharField(max_length=255)
     pocet_ludi = models.PositiveIntegerField(default=2, validators=[MinValueValidator(1), MaxValueValidator(45)], verbose_name="Počet ľudí")
-    datum_a_cas = models.DateTimeField(verbose_name="Dátum a čas rezervácie", validators=[future_datetime_only])
+    datum = models.DateField(verbose_name="Dátum rezervácie", validators=[future_date_only])
+    cas = models.TimeField(verbose_name="Čas rezervácie")
     phone_regex = RegexValidator(regex=r'^\+?1?\d{8,15}$', message="Telefónne číslo musí byť vo formáte: '+421911222333'.")
     telefonne_cislo = models.CharField(validators=[phone_regex], max_length=17, verbose_name="Telefónne číslo/Mobil")
     email = models.EmailField(verbose_name="E-mail")
@@ -32,4 +32,4 @@ class Reservation(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Upravené")
 
     def __str__(self):
-        return f'{self.pk} / {self.meno} {self.priezvisko} / {self.datum_a_cas} / {self.pocet_ludi} / {self.stav}'
+        return f'{self.pk} / {self.meno} {self.priezvisko} / {self.datum} {self.cas} / {self.pocet_ludi} / {self.stav}'
