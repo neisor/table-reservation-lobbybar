@@ -16,7 +16,6 @@ def create_new_reservation(request):
         if form.is_valid():
             created_reservation = form.save()
             messages.success(request, "Úspešne ste vytvorili novú rezerváciu.")
-            # return redirect("/")
         else:
             messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
             context = {
