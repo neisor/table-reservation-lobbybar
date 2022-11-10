@@ -39,36 +39,36 @@ def accept_reservation(request, reservation_uuid4: uuid.UUID):
     reservation = Reservation.objects.filter(uuid_identificator=reservation_uuid4).first()
     if not reservation:
         messages.warning(request, f'Zadaná rezervácia neexistuje.')
-        return redirect("create_new_reservation")
+        return redirect("all_reservations")
     if reservation.stav in [Reservation.Stavy.CAKA_SA_NA_POTVRDENIE_EMAILOVEJ_ADRESY, Reservation.Stavy.NOVA]:
         messages.error(request, "Rezervácia nemôže byť potvrdená predtým, ako zákazník potvrdí svoju rezerváciu cez e-mail.")
-        return redirect("create_new_reservation")
+        return redirect("all_reservations")
     if reservation.stav in [Reservation.Stavy.POTVRDENA, Reservation.Stavy.ZAMIETNUTA]:
         messages.error(request, f"Zadaná rezervácia už bola potvrdená alebo zamietnutá v minulosti.")
-        return redirect("create_new_reservation")
+        return redirect("all_reservations")
     reservation.stav = Reservation.Stavy.POTVRDENA
     reservation.save()
     # TO DO - SEND CONFIRMATION EMAIL TO THE CUSTOMER
     messages.success(request, f"Rezervácia číslo {reservation.id} bola úspešne prijatá.")
-    return redirect("create_new_reservation")
+    return redirect("all_reservations")
 
 @login_required
 def decline_reservation(request, reservation_uuid4: uuid.UUID):
     reservation = Reservation.objects.filter(uuid_identificator=reservation_uuid4).first()
     if not reservation:
         messages.warning(request, f'Zadaná rezervácia neexistuje.')
-        return redirect("create_new_reservation")
+        return redirect("all_reservations")
     if reservation.stav in [Reservation.Stavy.CAKA_SA_NA_POTVRDENIE_EMAILOVEJ_ADRESY, Reservation.Stavy.NOVA]:
         messages.error(request, "Rezervácia nemôže byť zamietnutá predtým, ako zákazník potvrdí svoju rezerváciu cez e-mail.")
-        return redirect("create_new_reservation")
+        return redirect("all_reservations")
     if reservation.stav in [Reservation.Stavy.POTVRDENA, Reservation.Stavy.ZAMIETNUTA]:
         messages.error(request, f"Zadaná rezervácia už bola potvrdená alebo zamietnutá v minulosti.")
-        return redirect("create_new_reservation")
+        return redirect("all_reservations")
     reservation.stav = Reservation.Stavy.ZAMIETNUTA
     reservation.save()
     # TO DO - SEND DECLINATION EMAIL TO THE CUSTOMER
     messages.success(request, f"Rezervácia číslo {reservation.id} bola zamietnutá.")
-    return redirect("create_new_reservation")
+    return redirect("all_reservations")
 
 @login_required
 def all_reservations(request):
