@@ -37,3 +37,6 @@ def accept_reservation(request):
 
 def decline_reservation(request):
     pass
+
+def all_reservations(request):
+    pass
