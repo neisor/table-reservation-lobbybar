@@ -19,12 +19,14 @@
                       <th>Vytvorené</th>
                       <th>Zmenené</th>
                       <th>UUID4</th>
+                      <th>Prijať</th>
+                      <th>Zamietnuť</th>
                     </tr>
                 </thead>
                 <tbody>        
                     {% for reservation in all_reservations %}
                         <tr>
-                            <td>{{ reservation.get_stav_display }}</td>
+                            <td><b>{{ reservation.get_stav_display }}</b></td>
                             <td>{{ reservation.id }}</td>
                             <td>{{ reservation.meno }}</td>
                             <td>{{ reservation.priezvisko }}</td>
@@ -36,6 +38,20 @@
                             <td>{{ reservation.created_at }}</td>
                             <td>{{ reservation.updated_at }}</td>
                             <td>{{ reservation.uuid_identificator }}</td>
+                            <td>
+                                <a href="{% url 'accept_reservation' reservation.uuid_identificator %}">
+                                    <button class="btn btn-success">
+                                        Prijať rezerváciu
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'accept_reservation' reservation.uuid_identificator %}">
+                                    <button class="btn btn-danger">
+                                        Zamietnuť rezerváciu
+                                    </button>
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
