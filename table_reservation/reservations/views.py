@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from reservations.forms import CreateReservationForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from core.helpers import generate_and_send_new_reservation_email_to_customer
 from core.models import Reservation
 import uuid
@@ -15,6 +16,8 @@ def create_new_reservation(request):
         form = CreateReservationForm(request.POST)
         if form.is_valid():
             created_reservation = form.save()
+            created_reservation.stav = Reservation.Stavy.NOVA
+            created_reservation.save()
             messages.success(request, "Úspešne ste vytvorili novú rezerváciu.")
         else:
             messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
@@ -31,11 +34,18 @@ def confirm_reservation_by_user(request, reservation_uuid4: uuid.UUID):
         messages.warning(request, f'Zadaná rezervácia neexistuje.')
     return redirect("/")
 
+@login_required
 def accept_reservation(request):
     pass
 
+@login_required
 def decline_reservation(request):
     pass
 
+@login_required
 def all_reservations(request):
-    pass
+    all_reservations = Reservation.objects.all().order_by('-id')  # Ordered by id since the id is always last id + 1
+    context = {
+        'all_reservations': all_reservations
+    }
+    return render(request, 'reservations/all_reservations.html', context=context)
