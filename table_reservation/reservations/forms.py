@@ -2,8 +2,11 @@ from django.forms import ModelForm, ValidationError
 from django import forms
 from core.models import Reservation
 import datetime
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV3
 
 class CreateReservationForm(ModelForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
     class Meta:
         model = Reservation
         exclude = ('uuid_identificator', 'stav')

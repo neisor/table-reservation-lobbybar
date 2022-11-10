@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'reservations.apps.ReservationsConfig',
     'accounts.apps.AccountsConfig',
+    'captcha'
 ]
 
 MIDDLEWARE = [
@@ -139,3 +141,10 @@ EMAIL_HOST_PASSWORD = "M4riNT3sT"
 EMAIL_HOST = "smtp.websupport.sk"
 EMAIL_PORT = "465"
 EMAIL_USE_SSL = True
+
+# reCAPTCHA setup
+if os.environ.get("USE_RECAPTCHA"):
+    RECAPTCHA_PUBLIC_KEY = 'MyRecaptchaKey123'  # Get the key from reCAPTCHA admin console
+    RECAPTCHA_PRIVATE_KEY = 'MyRecaptchaPrivateKey456'  # Get the key from reCAPTCHA admin console
+else:
+    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']  # Use default keys for testing purposes only and silence error
