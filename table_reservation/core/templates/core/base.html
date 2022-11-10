@@ -10,6 +10,10 @@
         {% block extra_head %}
         {% endblock %}
         <style>
+            #footer_zerumone a {
+              color: yellow;
+              text-decoration: none;
+            }
             {% block extra_style %}
             {% endblock %}
         </style>
@@ -61,6 +65,11 @@
         <!-- CONTENT -->
         {% block content %}
         {% endblock %}
+        
+        <!-- FOOTER -->
+        <div class="container-fluid text-center mt-3" id="footer_zerumone" style="height: 100px; background-color: #32516D;">
+          <h4 class="text-white align-middle p-4">Created with ❤ by <a href="https://zerumone.sk">ZerumOne | Weby, marketing a IT služby</a></h4>
+        </div>
 
         <!-- EXTRA SCRIPTS IN THE BODY -->
         <script>
