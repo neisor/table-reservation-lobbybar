@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container-fluid">
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <p>Zadané údaje nie sú platné. Skúste to znovu.</p>
+        </div>
+    {% endif %}
+    {% load crispy_forms_tags %}
+    <form action="{% url 'register' %}" id="register_form" method="POST" enctype="multipart/form-data">
+        {% crispy form %}
+    </form>
+    <button class="btn btn-success mt-3" type="submit" form="register_form">Zaregistrovať sa</button>
+</div>
+{% endblock %}
