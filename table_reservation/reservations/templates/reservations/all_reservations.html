@@ -1,0 +1,46 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Všetky rezervácie</h1>
+
+    <div class="container-fluid">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th>Stav</th>
+                      <th>ID</th>
+                      <th>Meno</th>
+                      <th>Priezvisko</th>
+                      <th>Dátum</th>
+                      <th>Čas</th>
+                      <th>Počet ľudí</th>
+                      <th>Tel. č.</th>
+                      <th>Správa</th>
+                      <th>Vytvorené</th>
+                      <th>Zmenené</th>
+                      <th>UUID4</th>
+                    </tr>
+                </thead>
+                <tbody>        
+                    {% for reservation in all_reservations %}
+                        <tr>
+                            <td>{{ reservation.get_stav_display }}</td>
+                            <td>{{ reservation.id }}</td>
+                            <td>{{ reservation.meno }}</td>
+                            <td>{{ reservation.priezvisko }}</td>
+                            <td>{{ reservation.datum }}</td>
+                            <td>{{ reservation.cas }}</td>
+                            <td>{{ reservation.pocet_ludi }}</td>
+                            <td>{{ reservation.telephone_number }}</td>
+                            <td>{{ reservation.sprava }}</td>
+                            <td>{{ reservation.created_at }}</td>
+                            <td>{{ reservation.updated_at }}</td>
+                            <td>{{ reservation.uuid_identificator }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
