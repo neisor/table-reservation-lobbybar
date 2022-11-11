@@ -30,5 +30,5 @@ class CreateReservationForm(ModelForm):
         if datum_a_cas_z_formulara < now_plus_2_hours:
             raise ValidationError('Dátum a čas nemôže byť v minulosti a menej ako 2 hodiny pred požadovanou rezerváciou.')
         if cas > cas_rezervacii_do or cas < cas_rezervacii_od:
-            raise ValidationError('Čas rezervácie musí byť medzi 15:00 až 20:30.')
+            raise ValidationError(f'Čas rezervácie musí byť medzi {cas_rezervacii_od.strftime("%H:%M")} až {cas_rezervacii_do.strftime("%H:%M")}.')
         
