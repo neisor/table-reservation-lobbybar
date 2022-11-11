@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from core.forms import CreatePovolenyCasForm, EditPovolenyCasForm
-from core.models import PovolenyCas
+from core.forms import CreatePovolenyCasForm, EditPovolenyCasForm, CreateAdminEmail
+from core.models import PovolenyCas, AdminEmail
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -73,3 +73,45 @@ def delete_povoleny_cas(request, povoleny_cas_id: int):
     povoleny_cas.delete()
     messages.success(request, f'Povolený čas s ID {povoleny_cas_id} bol úspešne vymazaný.')
     return redirect("all_povolene_casy")
+
+@login_required
+def all_admin_emaily(request):
+    admin_emaily = AdminEmail.objects.all()
+    context = {
+        "admin_emaily": admin_emaily
+    }
+    return render(request, 'core/all_admin_emaily.html', context=context)
+
+@login_required
+def create_new_admin_email(request):
+    if request.method == "GET":
+        povoleny_cas = AdminEmail.objects.all().first()
+        if povoleny_cas:
+            messages.warning(request, 'Administrátorský e-mail už existuje, nemôžete vytvoriť ďalší.')
+            return redirect("all_admin_emaily")
+        context = {
+            'form': CreateAdminEmail,
+        }
+        return render(request, 'core/create_new_admin_email.html', context=context)
+    if request.method == "POST":
+        form = CreateAdminEmail(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Úspešne ste vytvorili nový administrátorský e-mail.")
+        else:
+            messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
+            context = {
+                "form": form
+            }
+            return render(request, 'core/create_new_admin_email.html', context=context)
+        return redirect("all_admin_emaily")
+
+@login_required
+def delete_admin_email(request, admin_email_id: int):
+    admin_email = AdminEmail.objects.all().filter(id=admin_email_id).first()
+    if not admin_email:
+        messages.warning(request, f'Administrátorský e-mail s ID {admin_email_id} neexistuje.')
+        return redirect("all_admin_emaily")
+    admin_email.delete()
+    messages.success(request, f'Administrátorský e-mail s ID {admin_email_id} bol úspešne vymazaný.')
+    return redirect("all_admin_emaily")

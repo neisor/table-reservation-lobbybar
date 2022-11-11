@@ -1,0 +1,38 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Všetky administrátorské e-maily</h1>
+
+    {% if not admin_emaily %}
+        <h5 class="text-center text-danger">Zatiaľ neexistuje žiaden administrátorský e-mail.</h5>
+    {% else %}
+        <div class="container-fluid">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>E-mail</th>
+                            <th>Vymazať</th>
+                        </tr>
+                    </thead>
+                    <tbody>        
+                        {% for admin_email in admin_emaily %}
+                            <tr>
+                                <td>{{ admin_email.id }}</td>
+                                <td>{{ admin_email.email }}</td>
+                                <td>
+                                    <a href="{% url 'delete_admin_email' admin_email.id %}">
+                                        <button class="btn btn-danger">
+                                            Vymazať
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

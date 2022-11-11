@@ -48,3 +48,16 @@ class PovolenyCas(models.Model):
         if not self.pk and PovolenyCas.objects.exists():
             raise ValidationError('Môže existovať iba jedna inštancia povolených časov.')
         return super(PovolenyCas, self).save(*args, **kwargs)
+
+class AdminEmail(models.Model):
+    email = models.EmailField(verbose_name="Administrátorský e-mail")
+
+    def __str__(self):
+        return f'E-mail: {self.email}'
+
+    def save(self, *args, **kwargs):
+        # if we will not check for self.pk 
+        # then error will also get raised in update of existing model
+        if not self.pk and AdminEmail.objects.exists():
+            raise ValidationError('Môže existovať iba jedna inštancia administrátorského e-mailu.')
+        return super(AdminEmail, self).save(*args, **kwargs)

@@ -6,4 +6,7 @@ urlpatterns = [
     path('povoleny-cas/new', create_new_povoleny_cas, name="create_new_povoleny_cas"),
     path('povoleny-cas/edit/<int:povoleny_cas_id>', edit_povoleny_cas, name="edit_povoleny_cas"),
     path('povoleny-cas/delete/<int:povoleny_cas_id>', delete_povoleny_cas, name="delete_povoleny_cas"),
+    path('admin-email/all', all_admin_emaily, name="all_admin_emaily"),
+    path('admin-email/new', create_new_admin_email, name="create_new_admin_email"),
+    path('admin-email/delete/<int:admin_email_id>', delete_admin_email, name="delete_admin_email"),
 ]
