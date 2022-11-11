@@ -111,3 +111,48 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
         fail_silently=False,
     )
     return
+
+
+def notify_customer_about_accepted_or_declined_reservation(reservation: Reservation) -> None:
+    if reservation.stav == Reservation.Stavy.POTVRDENA:
+        subject = "'El Nacional - Rezervácia prijatá"
+        message_text = "Vaša rezervácia bola prijatá!"
+    else:
+        subject = "'El Nacional - Rezervácia zamietnutá"
+        message_text = "Vaša rezervácia bola zamietnutá!"
+    plain_text_message = f"""
+    Dobrý deň,
+    
+    {message_text}
+    
+    Detaily Vašej rezervácie:
+    Počet ľudí: {reservation.pocet_ludi}
+    Dátum: {reservation.datum.strftime("%d.%m.%Y")}
+    Čas: {reservation.cas.strftime("%H:%M")}
+    Meno: {reservation.meno}
+    Priezvisko: {reservation.priezvisko}
+    Tel. č.: {reservation.telefonne_cislo}
+    E-mail: {reservation.email}
+    """
+    html_message = f"""
+    Dobrý deň,
+    
+    {message_text}
+    
+    <b><u>Detaily Vašej rezervácie:</u></b>
+    <b>Počet ľudí:</b> {reservation.pocet_ludi}
+    <b>Dátum:</b> {reservation.datum.strftime("%d.%m.%Y")}
+    <b>Čas:</b> {reservation.cas.strftime("%H:%M")}
+    <b>Meno:</b> {reservation.meno}
+    <b>Priezvisko:</b> {reservation.priezvisko}
+    <b>Tel. č.:</b> {reservation.telefonne_cislo}
+    <b>E-mail:</b> {reservation.email}
+    """
+    send_mail(
+        subject,
+        plain_text_message,
+        [reservation.email],
+        html_message=html_message,
+        fail_silently=False,
+    )
+    return

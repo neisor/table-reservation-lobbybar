@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from reservations.forms import CreateReservationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from reservations.helpers import generate_and_send_new_reservation_email_to_customer, notify_administrator_to_accept_or_decline_reservation
+from reservations.helpers import *
 from core.models import Reservation, PovolenyCas
 import uuid
 
@@ -55,7 +55,8 @@ def accept_reservation(request, reservation_uuid4: uuid.UUID):
         return redirect("all_reservations")
     reservation.stav = Reservation.Stavy.POTVRDENA
     reservation.save()
-    # TO DO - SEND CONFIRMATION EMAIL TO THE CUSTOMER
+    # SEND ACCEPTANCE EMAIL TO THE CUSTOMER
+    notify_customer_about_accepted_or_declined_reservation(reservation=reservation)
     messages.success(request, f"Rezervácia číslo {reservation.id} bola úspešne prijatá.")
     return redirect("all_reservations")
 
@@ -73,7 +74,8 @@ def decline_reservation(request, reservation_uuid4: uuid.UUID):
         return redirect("all_reservations")
     reservation.stav = Reservation.Stavy.ZAMIETNUTA
     reservation.save()
-    # TO DO - SEND DECLINATION EMAIL TO THE CUSTOMER
+    # SEND DECLINATION EMAIL TO THE CUSTOMER
+    notify_customer_about_accepted_or_declined_reservation(reservation=reservation)
     messages.success(request, f"Rezervácia číslo {reservation.id} bola zamietnutá.")
     return redirect("all_reservations")
 
