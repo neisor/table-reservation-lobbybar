@@ -45,7 +45,8 @@
                       </a>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'all_reservations' %}">Všetky rezervácie</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="{% url 'all_povolene_casy' %}">Všetky povolené časy</a></li>
+                        <li><a class="dropdown-item" href="{% url 'create_new_povoleny_cas' %}">Nový povolený čas</a></li>
                       </ul>
                     </li>
                   {% endif %}

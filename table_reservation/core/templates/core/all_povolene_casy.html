@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Všetky povolené časy</h1>
+
+    {% if not povolene_casy %}
+        <h5 class="text-center text-danger">Zatiaľ neexistuje žiaden povolený čas.</h5>
+    {% else %}
+        <div class="container-fluid">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>Čas od</th>
+                        <th>Čas do</th>
+                        <th>Prijať</th>
+                        <th>Vymazať</th>
+                        </tr>
+                    </thead>
+                    <tbody>        
+                        {% for povoleny_cas in povolene_casy %}
+                            <tr>
+                                <td>{{ povoleny_cas.id }}</td>
+                                <td>{{ povoleny_cas.cas_rezervacii_od }}</td>
+                                <td>{{ povoleny_cas.cas_rezervacii_do }}</td>
+                                <td>
+                                    <a href="{% url 'edit_povoleny_cas' povoleny_cas.id %}">
+                                        <button class="btn btn-warning">
+                                            Zmeniť
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'delete_povoleny_cas' povoleny_cas.id %}">
+                                        <button class="btn btn-danger">
+                                            Vymazať
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
