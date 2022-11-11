@@ -11,7 +11,7 @@
         {% endblock %}
         <style>
             #footer_zerumone a {
-              color: yellow;
+              color: rgb(255, 255, 255);
               text-decoration: none;
             }
             {% block extra_style %}
@@ -51,6 +51,9 @@
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'all_admin_emaily' %}">Všetky administrátorské e-maily</a></li>
                         <li><a class="dropdown-item" href="{% url 'create_new_admin_email' %}">Nový administrátorský e-mail</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'all_aktivity' %}">Všetky aktivity</a></li>
+                        <li><a class="dropdown-item" href="{% url 'create_new_aktivita' %}">Nová aktivita</a></li>
                       </ul>
                     </li>
                   {% endif %}
@@ -73,7 +76,7 @@
         
         <!-- FOOTER -->
         <div class="container-fluid text-center mt-3" id="footer_zerumone" style="height: 100px; background-color: #32516D;">
-          <h5 class="text-white align-middle p-4"><b>Created with ❤ by <a href="https://zerumone.sk">ZerumOne | Weby, marketing a IT služby</a></b></h5>
+          <h5 class="text-white align-middle p-4">Created with ❤ by <a href="https://zerumone.sk">ZerumOne | Weby, marketing a IT služby</a></h5>
         </div>
 
         <!-- EXTRA SCRIPTS IN THE BODY -->
