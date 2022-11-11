@@ -12,7 +12,7 @@ class Reservation(models.Model):
         CAKA_SA_NA_POTVRDENIE_EMAILOVEJ_ADRESY = "CAKA_SA_NA_POTVRDENIE_EMAILOVEJ_ADRESY", "Čaká sa na potvrdenie e-mailovej adresy"
         EMAILOVA_ADRESA_POTVRDENA = "EMAILOVA_ADRESA_POTVRDENA", "E-mailová adresa potvrdená"
         SPRACOVAVA_SA = "SPRACOVAVA_SA", "Spracováva sa"
-        POTVRDENA = "POTVRDENA", "Potvrdená"
+        PRIJATA = "PRIJATA", "Prijatá"
         ZAMIETNUTA = "ZAMIETNUTA", "Zamietnutá"
 
     uuid_identificator = models.UUIDField(default=uuid.uuid4)

@@ -48,12 +48,12 @@ def accept_reservation(request, reservation_uuid4: uuid.UUID):
         messages.warning(request, f'Zadaná rezervácia neexistuje.')
         return redirect("all_reservations")
     if reservation.stav in [Reservation.Stavy.CAKA_SA_NA_POTVRDENIE_EMAILOVEJ_ADRESY, Reservation.Stavy.NOVA]:
-        messages.error(request, "Rezervácia nemôže byť potvrdená predtým, ako zákazník potvrdí svoju rezerváciu cez e-mail.")
+        messages.error(request, "Rezervácia nemôže byť prijatá predtým, ako zákazník potvrdí svoju rezerváciu cez e-mail.")
         return redirect("all_reservations")
-    if reservation.stav in [Reservation.Stavy.POTVRDENA, Reservation.Stavy.ZAMIETNUTA]:
-        messages.error(request, f"Zadaná rezervácia už bola potvrdená alebo zamietnutá v minulosti.")
+    if reservation.stav in [Reservation.Stavy.PRIJATA, Reservation.Stavy.ZAMIETNUTA]:
+        messages.error(request, f"Zadaná rezervácia už bola prijatá alebo zamietnutá v minulosti.")
         return redirect("all_reservations")
-    reservation.stav = Reservation.Stavy.POTVRDENA
+    reservation.stav = Reservation.Stavy.PRIJATA
     reservation.save()
     # SEND ACCEPTANCE EMAIL TO THE CUSTOMER
     notify_customer_about_accepted_or_declined_reservation(reservation=reservation)
@@ -69,8 +69,8 @@ def decline_reservation(request, reservation_uuid4: uuid.UUID):
     if reservation.stav in [Reservation.Stavy.CAKA_SA_NA_POTVRDENIE_EMAILOVEJ_ADRESY, Reservation.Stavy.NOVA]:
         messages.error(request, "Rezervácia nemôže byť zamietnutá predtým, ako zákazník potvrdí svoju rezerváciu cez e-mail.")
         return redirect("all_reservations")
-    if reservation.stav in [Reservation.Stavy.POTVRDENA, Reservation.Stavy.ZAMIETNUTA]:
-        messages.error(request, f"Zadaná rezervácia už bola potvrdená alebo zamietnutá v minulosti.")
+    if reservation.stav in [Reservation.Stavy.PRIJATA, Reservation.Stavy.ZAMIETNUTA]:
+        messages.error(request, f"Zadaná rezervácia už bola prijatá alebo zamietnutá v minulosti.")
         return redirect("all_reservations")
     reservation.stav = Reservation.Stavy.ZAMIETNUTA
     reservation.save()

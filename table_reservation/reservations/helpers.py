@@ -129,7 +129,7 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
 
 
 def notify_customer_about_accepted_or_declined_reservation(reservation: Reservation) -> None:
-    if reservation.stav == Reservation.Stavy.POTVRDENA:
+    if reservation.stav == Reservation.Stavy.PRIJATA:
         subject = "El Nacional - Rezervácia prijatá"
         message_text = "Vaša rezervácia bola prijatá! Tešíme sa na Vás."
     else:
