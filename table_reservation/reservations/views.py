@@ -20,7 +20,7 @@ def create_new_reservation(request):
             created_reservation = form.save()
             created_reservation.stav = Reservation.Stavy.NOVA
             created_reservation.save()
-            messages.success(request, "Úspešne ste vytvorili novú rezerváciu.")
+            messages.success(request, "Úspešne ste vytvorili novú rezerváciu. Je potrebné aby ste potvrdili rezerváciu na Vami zadanej e-mailovej adrese.")
         else:
             messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
             context = {
