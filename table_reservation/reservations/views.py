@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from reservations.forms import CreateReservationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from reservations.helpers import generate_and_send_new_reservation_email_to_customer
+from reservations.helpers import generate_and_send_new_reservation_email_to_customer, notify_administrator_to_accept_or_decline_reservation
 from core.models import Reservation, PovolenyCas
 import uuid
 
@@ -38,6 +38,7 @@ def confirm_reservation_by_user(request, reservation_uuid4: uuid.UUID):
     reservation.stav = Reservation.Stavy.EMAILOVA_ADRESA_POTVRDENA
     reservation.save()
     messages.success(request, 'Rezervácia bola úspešne potvrdená. O prijatí rezervácie budete informovaní e-mailom.')
+    notify_administrator_to_accept_or_decline_reservation(request=request, reservation=reservation)
     return redirect("/")
 
 @login_required
