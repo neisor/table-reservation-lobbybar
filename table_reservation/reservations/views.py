@@ -3,13 +3,15 @@ from reservations.forms import CreateReservationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from core.helpers import generate_and_send_new_reservation_email_to_customer
-from core.models import Reservation
+from core.models import Reservation, PovolenyCas
 import uuid
 
 def create_new_reservation(request):
     if request.method == "GET":
+        povoleny_cas = PovolenyCas.objects.all().first()
         context = {
-            'form': CreateReservationForm
+            'form': CreateReservationForm,
+            'povoleny_cas': povoleny_cas
         }
         return render(request, 'reservations/create_new_reservation.html', context=context)
     if request.method == "POST":
