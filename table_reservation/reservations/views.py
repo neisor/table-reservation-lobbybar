@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from reservations.forms import CreateReservationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from core.helpers import generate_and_send_new_reservation_email_to_customer
+from reservations.helpers import generate_and_send_new_reservation_email_to_customer
 from core.models import Reservation, PovolenyCas
 import uuid
 
