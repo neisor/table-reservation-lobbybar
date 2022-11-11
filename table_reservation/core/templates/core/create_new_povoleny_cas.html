@@ -3,11 +3,6 @@
     <h1 class="text-center">Nový povolený čas</h1>
 
     <div class="container-lg">
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                {{ form.errors }}
-            </div>
-        {% endif %}
         {% load crispy_forms_tags %}
         <form action="{% url 'create_new_povoleny_cas' %}" id="create_new_povoleny_cas_form" method="POST" enctype="multipart/form-data">
             {% crispy form %}
