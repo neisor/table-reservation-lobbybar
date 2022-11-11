@@ -2,8 +2,16 @@ from django.core.mail import send_mail
 from core.models import Reservation, AdminEmail
 from django.urls import reverse
 
+def get_only_nazov_for_each_aktivita_from_reservation(reservation: Reservation) -> str:
+    aktivity_z_rezervacie = ""
+    for aktivita in reservation.aktivita.all():
+        aktivity_z_rezervacie += aktivita.nazov + ", "
+    aktivity_z_rezervacie = aktivity_z_rezervacie.rstrip(", ")
+    return aktivity_z_rezervacie
+
 def generate_and_send_new_reservation_email_to_customer(request, reservation: Reservation) -> None:
     url_to_confirm_reservation = request.build_absolute_uri(reverse('confirm_reservation_by_user', args=(reservation.uuid_identificator, )))
+    aktivity = get_only_nazov_for_each_aktivita_from_reservation(reservation)
     plain_text_message = f"""
     Dobrý deň,
     Vašu rezerváciu je potrebné potvrdiť kliknutím na nižšie uvedený odkaz.
@@ -12,6 +20,7 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     Počet ľudí: {reservation.pocet_ludi}
     Dátum: {reservation.datum.strftime("%d.%m.%Y")}
     Čas: {reservation.cas.strftime("%H:%M")}
+    Aktivity: {aktivity}
     Meno: {reservation.meno}
     Priezvisko: {reservation.priezvisko}
     Tel. č.: {reservation.telefonne_cislo}
@@ -33,6 +42,7 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     <b>Počet ľudí:</b> {reservation.pocet_ludi}<br/>
     <b>Dátum:</b> {reservation.datum.strftime("%d.%m.%Y")}<br/>
     <b>Čas:</b> {reservation.cas.strftime("%H:%M")}<br/>
+    <b>Aktivity:</b> {aktivity}<br/>
     <b>Meno:</b> {reservation.meno}<br/>
     <b>Priezvisko:</b> {reservation.priezvisko}<br/>
     <b>Tel. č.:</b> {reservation.telefonne_cislo}<br/>
@@ -59,6 +69,7 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
 def notify_administrator_to_accept_or_decline_reservation(request, reservation: Reservation) -> None:
     url_to_accept_reservation = request.build_absolute_uri(reverse('accept_reservation', args=(reservation.uuid_identificator, )))
     url_to_decline_reservation = request.build_absolute_uri(reverse('decline_reservation', args=(reservation.uuid_identificator, )))
+    aktivity = get_only_nazov_for_each_aktivita_from_reservation(reservation)
     plain_text_message = f"""
     Dobrý deň,
     
@@ -68,6 +79,7 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
     Počet ľudí: {reservation.pocet_ludi}
     Dátum: {reservation.datum.strftime("%d.%m.%Y")}
     Čas: {reservation.cas.strftime("%H:%M")}
+    Aktivity: {aktivity}
     Meno: {reservation.meno}
     Priezvisko: {reservation.priezvisko}
     Tel. č.: {reservation.telefonne_cislo}
@@ -90,6 +102,7 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
     <b>Počet ľudí:</b> {reservation.pocet_ludi}<br/>
     <b>Dátum:</b> {reservation.datum.strftime("%d.%m.%Y")}<br/>
     <b>Čas:</b> {reservation.cas.strftime("%H:%M")}<br/>
+    <b>Aktivity:</b> {aktivity}<br/>
     <b>Meno:</b> {reservation.meno}<br/>
     <b>Priezvisko:</b> {reservation.priezvisko}<br/>
     <b>Tel. č.:</b> {reservation.telefonne_cislo}<br/>
@@ -122,6 +135,7 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     else:
         subject = "El Nacional - Rezervácia zamietnutá"
         message_text = "Vaša rezervácia bola zamietnutá!"
+    aktivity = get_only_nazov_for_each_aktivita_from_reservation(reservation)
     plain_text_message = f"""
     Dobrý deň,
     
@@ -131,6 +145,7 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     Počet ľudí: {reservation.pocet_ludi}
     Dátum: {reservation.datum.strftime("%d.%m.%Y")}
     Čas: {reservation.cas.strftime("%H:%M")}
+    Aktivity: {aktivity}
     Meno: {reservation.meno}
     Priezvisko: {reservation.priezvisko}
     Tel. č.: {reservation.telefonne_cislo}
@@ -145,6 +160,7 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     <b>Počet ľudí:</b> {reservation.pocet_ludi}<br/>
     <b>Dátum:</b> {reservation.datum.strftime("%d.%m.%Y")}<br/>
     <b>Čas:</b> {reservation.cas.strftime("%H:%M")}<br/>
+    <b>Aktivity:</b> {aktivity}<br/>
     <b>Meno:</b> {reservation.meno}<br/>
     <b>Priezvisko:</b> {reservation.priezvisko}<br/>
     <b>Tel. č.:</b> {reservation.telefonne_cislo}<br/>

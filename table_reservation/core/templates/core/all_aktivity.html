@@ -1,0 +1,47 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Všetky aktivity</h1>
+
+    {% if not povolene_casy %}
+        <h5 class="text-center text-danger">Zatiaľ neexistuje žiadna aktivita.</h5>
+    {% else %}
+        <div class="container-fluid">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>Čas od</th>
+                        <th>Čas do</th>
+                        <th>Zmeniť</th>
+                        <th>Vymazať</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for aktivita in aktivity %}
+                            <tr>
+                                <td>{{ aktivita.id }}</td>
+                                <td>{{ aktivita.nazov }}</td>
+                                <td>
+                                    <a href="{% url 'edit_aktivita' aktivita.id %}">
+                                        <button class="btn btn-warning">
+                                            Zmeniť
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'delete_aktivita' aktivita.id %}">
+                                        <button class="btn btn-danger">
+                                            Vymazať
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

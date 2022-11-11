@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from core.models import PovolenyCas, AdminEmail
+from core.models import PovolenyCas, AdminEmail, Aktivita
 
 class CreatePovolenyCasForm(ModelForm):
     class Meta:
@@ -19,3 +19,10 @@ class CreateAdminEmail(ModelForm):
         model = AdminEmail
         fields = "__all__"
     
+class CreateAktivitaForm(ModelForm):
+    class Meta:
+        model = Aktivita
+        fields = "__all__"
+
+class EditAktivitaForm(CreateAktivitaForm):
+    pass

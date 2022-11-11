@@ -12,7 +12,12 @@ class CreateReservationForm(ModelForm):
         widgets = {
             'datum': forms.DateInput(format=('%d.%m.%Y'), attrs={'class':'form-control', 'placeholder':'Vyberte dátum', 'type':'date'}),
             'cas': forms.TimeInput(format=('%H:%M'), attrs={'class':'form-control', 'placeholder':'Vyberte čas', 'type':'time'}),
+            'aktivita': forms.CheckboxSelectMultiple()
         }
+
+    def __init__(self, *args, **kwargs):
+        super(CreateReservationForm, self).__init__(*args, **kwargs)
+        self.fields['aktivita'].label = 'Ako plánujete stráviť večer u nás?'
 
     def clean(self):
         cleaned_data = super().clean()

@@ -21,6 +21,7 @@ class Reservation(models.Model):
     pocet_ludi = models.PositiveIntegerField(default=2, validators=[MinValueValidator(1), MaxValueValidator(45)], verbose_name="Počet ľudí")
     datum = models.DateField(verbose_name="Dátum rezervácie", validators=[future_date_only])
     cas = models.TimeField(verbose_name="Čas rezervácie")
+    aktivita = models.ManyToManyField(to='Aktivita')
     phone_regex = RegexValidator(regex=r'^\+?1?\d{8,15}$', message="Telefónne číslo musí byť vo formáte: '+421911222333'.")
     telefonne_cislo = models.CharField(validators=[phone_regex], max_length=17, verbose_name="Telefónne číslo/Mobil")
     email = models.EmailField(verbose_name="E-mail")
@@ -34,6 +35,12 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f'{self.pk} / {self.meno} {self.priezvisko} / {self.datum} {self.cas} / {self.pocet_ludi} / {self.stav}'
+
+class Aktivita(models.Model):
+    nazov = models.CharField(max_length=100, verbose_name="Názov")
+
+    def __str__(self):
+        return f'{self.nazov}'
 
 class PovolenyCas(models.Model):
     cas_rezervacii_od = models.TimeField(verbose_name="Povolený čas rezervácií od")
