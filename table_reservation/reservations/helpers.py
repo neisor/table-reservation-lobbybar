@@ -1,5 +1,5 @@
 from django.core.mail import send_mail
-from core.models import Reservation
+from core.models import Reservation, AdminEmail
 from django.urls import reverse
 
 def generate_and_send_new_reservation_email_to_customer(request, reservation: Reservation) -> None:
@@ -45,10 +45,11 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
 
     Bez Vášho potvrdenia rezervácie nebude možné Vašu rezerváciu prijať.
     """
+    recipient = AdminEmail.objects.all().first()
     send_mail(
         'El Nacional - Potvrďťe Vašu rezerváciu',
         plain_text_message,
-        [reservation.email],
+        [recipient.email],
         html_message=html_message,
         fail_silently=False,
     )
@@ -101,10 +102,11 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
 
     (Skopírujte vyššie uvedený odkaz a vložte ho do prehliadača v prípade nefunkčnosti automatického prekliku.)
     """
+    recipient = AdminEmail.objects.all().first()
     send_mail(
         f'El Nacional - Nová rezervácia - ID: {reservation.id}',
         plain_text_message,
-        [reservation.email],
+        [recipient.email],
         html_message=html_message,
         fail_silently=False,
     )
