@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
+from django.forms import ValidationError
 import uuid
 from core.validators import future_date_only
 
@@ -33,3 +34,17 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f'{self.pk} / {self.meno} {self.priezvisko} / {self.datum} {self.cas} / {self.pocet_ludi} / {self.stav}'
+
+class PovolenyCas(models.Model):
+    cas_rezervacii_od = models.TimeField(verbose_name="Povolený čas rezervácií od")
+    cas_rezervacii_do = models.TimeField(verbose_name="Povolený čas rezervácií do")
+
+    def __str__(self):
+        return f'Čas od {self.cas_rezervacii_od} do {self.cas_rezervacii_do}'
+
+    def save(self, *args, **kwargs):
+        # if we will not check for self.pk 
+        # then error will also get raised in update of existing model
+        if not self.pk and PovolenyCas.objects.exists():
+            raise ValidationError('Môže existovať iba jedna inštancia povolených časov.')
+        return super(PovolenyCas, self).save(*args, **kwargs)
