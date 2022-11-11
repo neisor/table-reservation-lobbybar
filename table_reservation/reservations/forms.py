@@ -3,10 +3,9 @@ from django import forms
 from core.models import Reservation
 import datetime
 from captcha.fields import ReCaptchaField
-from captcha.widgets import ReCaptchaV3
 
 class CreateReservationForm(ModelForm):
-    captcha = ReCaptchaField(widget=ReCaptchaV3)
+    captcha = ReCaptchaField()
     class Meta:
         model = Reservation
         exclude = ('uuid_identificator', 'stav')
@@ -20,7 +19,7 @@ class CreateReservationForm(ModelForm):
         datum = cleaned_data.get("datum")
         cas = cleaned_data.get("cas")
         datum_a_cas = datetime.datetime.combine(datum, cas)
-        now = datetime.datetime.now()
-        if datum_a_cas < now:
-            raise ValidationError('Dátum a čas nemôže byť v minulosti.')
+        now_plus_2_hours = datetime.datetime.now() + datetime.timedelta(hours=2)
+        if datum_a_cas < now_plus_2_hours:
+            raise ValidationError('Dátum a čas nemôže byť v minulosti a menej ako 2 hodiny pred požadovanou rezerváciou.')
         
