@@ -34,6 +34,10 @@ def confirm_reservation_by_user(request, reservation_uuid4: uuid.UUID):
     reservation = Reservation.objects.filter(uuid_identificator=reservation_uuid4).first()
     if not reservation:
         messages.warning(request, f'Zadaná rezervácia neexistuje.')
+        return redirect("/")
+    reservation.stav = Reservation.Stavy.EMAILOVA_ADRESA_POTVRDENA
+    reservation.save()
+    messages.success(request, 'Rezervácia bola úspešne potvrdená. O prijatí rezervácie budete informovaní e-mailom.')
     return redirect("/")
 
 @login_required
