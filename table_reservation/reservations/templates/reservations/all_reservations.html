@@ -14,6 +14,7 @@
                       <th>Dátum</th>
                       <th>Čas</th>
                       <th>Počet ľudí</th>
+                      <th>E-mail</th>
                       <th>Tel. č.</th>
                       <th>Správa</th>
                       <th>Vytvorené</th>
@@ -21,6 +22,7 @@
                       <th>UUID4</th>
                       <th>Prijať</th>
                       <th>Zamietnuť</th>
+                      <th>Potvrdiť e-mail rezervácie</th>
                     </tr>
                 </thead>
                 <tbody>        
@@ -33,6 +35,7 @@
                             <td>{{ reservation.datum }}</td>
                             <td>{{ reservation.cas }}</td>
                             <td>{{ reservation.pocet_ludi }}</td>
+                            <td>{{ reservation.email }}</td>
                             <td>{{ reservation.telefonne_cislo }}</td>
                             <td>{{ reservation.sprava }}</td>
                             <td>{{ reservation.created_at }}</td>
@@ -49,6 +52,13 @@
                                 <a href="{% url 'decline_reservation' reservation.uuid_identificator %}">
                                     <button class="btn btn-danger">
                                         Zamietnuť rezerváciu
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'confirm_reservation_by_user' reservation.uuid_identificator %}">
+                                    <button class="btn btn-info">
+                                        Potvrdiť e-mail rezervácie
                                     </button>
                                 </a>
                             </td>
