@@ -35,6 +35,10 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     Bez Vášho potvrdenia rezervácie nebude možné Vašu rezerváciu prijať.
 
     UPOZORNENIE: Po prijatí alebo zamietnutí rezervácie Vám príde potvrdzujúci e-mail.
+
+    Ďakujeme.
+    Tím El Nacional
+    https://elnacional.sk
     """
     html_message = f"""
     Dobrý deň,<br/>
@@ -57,7 +61,11 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
 
     Bez Vášho potvrdenia rezervácie nebude možné Vašu rezerváciu prijať.<br/><br/>
 
-    <b>UPOZORNENIE:</b> Po prijatí alebo zamietnutí rezervácie Vám príde potvrdzujúci e-mail.
+    <b>UPOZORNENIE:</b> Po prijatí alebo zamietnutí rezervácie Vám príde potvrdzujúci e-mail.<br/><br/>
+
+    Ďakujeme.<br/>
+    Tím El Nacional<br/>
+    <a href="https://elnacional.sk">https://elnacional.sk</a>
     """
     admin_email = AdminEmail.objects.all().first()
     send_mail(
@@ -154,6 +162,10 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     Priezvisko: {reservation.priezvisko}
     Tel. č.: {reservation.telefonne_cislo}
     E-mail: {reservation.email}
+
+    Ďakujeme.
+    Tím El Nacional
+    https://elnacional.sk
     """
     html_message = f"""
     Dobrý deň,<br/><br/>
@@ -168,7 +180,11 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     <b>Meno:</b> {reservation.meno}<br/>
     <b>Priezvisko:</b> {reservation.priezvisko}<br/>
     <b>Tel. č.:</b> {reservation.telefonne_cislo}<br/>
-    <b>E-mail:</b> {reservation.email}
+    <b>E-mail:</b> {reservation.email}<br/><br/>
+
+    Ďakujeme.<br/>
+    Tím El Nacional<br/>
+    <a href="https://elnacional.sk">https://elnacional.sk</a>
     """
     admin_email = AdminEmail.objects.all().first()
     send_mail(
