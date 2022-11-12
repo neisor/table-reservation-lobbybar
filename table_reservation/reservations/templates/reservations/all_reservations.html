@@ -29,7 +29,19 @@
                 <tbody>        
                     {% for reservation in all_reservations %}
                         <tr>
-                            <td><b>{{ reservation.get_stav_display }}</b></td>
+                            <td>
+                                {% if reservation.stav == "PRIJATA" %}
+                                    <span class="text-success">
+                                {% elif reservation.stav == "ZAMIETNUTA" %}
+                                    <span class="text-danger">
+                                {% elif reservation.stav == "EMAILOVA_ADRESA_POTVRDENA" %}
+                                    <span class="text-primary">
+                                {% else %}
+                                    <span class="text-dark">
+                                {% endif %}
+                                        <b>{{ reservation.get_stav_display }}</b>
+                                </span>
+                            </td>
                             <td>{{ reservation.id }}</td>
                             <td>{{ reservation.meno }}</td>
                             <td>{{ reservation.priezvisko }}</td>
