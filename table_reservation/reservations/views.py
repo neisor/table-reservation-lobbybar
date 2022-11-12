@@ -127,3 +127,17 @@ def edit_or_show_poznamka_administratora(request, reservation_uuid4: uuid.UUID):
             }
             return render(request, 'reservations/edit_poznamka_administratora.html', context=context)
         return redirect("all_reservations")
+
+@login_required
+def show_message_from_user(request, reservation_uuid4: uuid.UUID):
+    reservation = Reservation.objects.all().filter(uuid_identificator=reservation_uuid4).first()
+    if not reservation:
+        messages.warning(request, f'Zadaná rezervácia v systéme neexistuje.')
+        return redirect("all_reservations")
+    if not reservation.sprava:
+        messages.warning(request, f'Zadaná rezervácia neobsahuje žiadnu správu.')
+        return redirect("all_reservations")
+    context = {
+        "reservation": reservation
+    }
+    return render(request, 'reservations/show_message_from_user.html', context=context)

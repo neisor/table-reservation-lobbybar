@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Správa od používateľa z rezervácie s ID {{ reservation.id }}</h1>
+
+    <div class="container-lg">
+        <h5>Správa:</h5>
+        <p>{{ reservation.sprava }}</p>
+    </div>
+
+{% endblock %}

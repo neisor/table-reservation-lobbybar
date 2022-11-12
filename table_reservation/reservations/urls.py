@@ -8,4 +8,5 @@ urlpatterns = [
     path('accept/<uuid:reservation_uuid4>', accept_reservation, name="accept_reservation"),
     path('decline/<uuid:reservation_uuid4>', decline_reservation, name="decline_reservation"),
     path('edit-poznamka-administratora/<uuid:reservation_uuid4>', edit_or_show_poznamka_administratora, name="edit_or_show_poznamka_administratora"),
+    path('show-message/<uuid:reservation_uuid4>', show_message_from_user, name="show_message_from_user"),
 ]

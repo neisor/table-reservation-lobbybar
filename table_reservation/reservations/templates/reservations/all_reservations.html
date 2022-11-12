@@ -17,13 +17,13 @@
                       <th>E-mail</th>
                       <th>Tel. č.</th>
                       <th>Správa</th>
-                      <th>Vytvorené</th>
-                      <th>Zmenené</th>
                       <th>UUID4</th>
                       <th>Poznámka</th>
                       <th>Prijať</th>
                       <th>Zamietnuť</th>
                       <th>Potvrdiť e-mail rezervácie</th>
+                      <th>Vytvorené</th>
+                      <th>Zmenené</th>
                     </tr>
                 </thead>
                 <tbody>        
@@ -38,9 +38,17 @@
                             <td>{{ reservation.pocet_ludi }}</td>
                             <td>{{ reservation.email }}</td>
                             <td>{{ reservation.telefonne_cislo }}</td>
-                            <td>{{ reservation.sprava }}</td>
-                            <td>{{ reservation.created_at }}</td>
-                            <td>{{ reservation.updated_at }}</td>
+                            <td>
+                                {% if reservation.sprava %}
+                                    <a href="{% url 'show_message_from_user' reservation.uuid_identificator %}">
+                                        <button class="btn btn-dark">
+                                            Zobraziť správu
+                                        </button>
+                                    </a>
+                                {% else %}
+                                    Žiadna správa
+                                {% endif %}
+                            </td>
                             <td>{{ reservation.uuid_identificator }}</td>
                             <td>
                                 {% if reservation.poznamka_administratora %}
@@ -78,6 +86,8 @@
                                     </button>
                                 </a>
                             </td>
+                            <td>{{ reservation.created_at }}</td>
+                            <td>{{ reservation.updated_at }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

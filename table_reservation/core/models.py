@@ -25,7 +25,7 @@ class Reservation(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{8,15}$', message="Telefónne číslo musí byť vo formáte: '+421911222333'.")
     telefonne_cislo = models.CharField(validators=[phone_regex], max_length=17, verbose_name="Telefónne číslo/Mobil")
     email = models.EmailField(verbose_name="E-mail")
-    sprava = models.TextField(verbose_name="Správa")
+    sprava = models.TextField(verbose_name="Správa", null=True, blank=True)
     stav = models.CharField(
         max_length=40,
         choices=Stavy.choices
