@@ -135,9 +135,9 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Email setup
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = "marin-test@zerumone.sk"
-EMAIL_HOST_USER = "marin-test@zerumone.sk"
-EMAIL_HOST_PASSWORD = "M4riNT3sT"
+DEFAULT_FROM_EMAIL = "rezervacie@elnacional.sk"
+EMAIL_HOST_USER = "rezervacie@elnacional.sk"
+EMAIL_HOST_PASSWORD = "r3zervacieElNacional"
 EMAIL_HOST = "smtp.websupport.sk"
 EMAIL_PORT = "465"
 EMAIL_USE_SSL = True
