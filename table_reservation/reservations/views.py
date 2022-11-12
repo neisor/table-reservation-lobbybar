@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from reservations.helpers import *
 from core.models import Reservation, PovolenyCas
 import uuid
+from django.core.paginator import Paginator
 
 def create_new_reservation(request):
     if request.method == "GET":
@@ -84,7 +85,17 @@ def decline_reservation(request, reservation_uuid4: uuid.UUID):
 @login_required
 def all_reservations(request):
     all_reservations = Reservation.objects.all().order_by('-id')  # Ordered by id since the id is always last id + 1
-    context = {
-        'all_reservations': all_reservations
-    }
+    number_of_reservations_per_page = 25 # Show 25 reservations per page.
+    if request.GET.get("zobrazitVsetko"):
+        context = {"all_reservations": all_reservations}
+        return render(request, 'reservations/all_reservations.html', context=context)
+    else:
+        paginator = Paginator(all_reservations, number_of_reservations_per_page)
+        page_number = request.GET.get('page', 1)
+        all_reservations = page_obj = paginator.get_page(page_number)
+        context = {
+            "all_reservations": all_reservations,
+            "page_obj": page_obj,
+            "number_of_reservations_per_page": number_of_reservations_per_page
+        }
     return render(request, 'reservations/all_reservations.html', context=context)
