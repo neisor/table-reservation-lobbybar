@@ -14,7 +14,7 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     aktivity = get_only_nazov_for_each_aktivita_from_reservation(reservation)
     plain_text_message = f"""
     Dobrý deň,
-    Vašu rezerváciu je potrebné potvrdiť kliknutím na nižšie uvedený odkaz.
+    Vašu rezerváciu je pred vybavením potrebné potvrdiť kliknutím na nižšie uvedený odkaz.
 
     Detaily Vašej rezervácie:
     Počet ľudí: {reservation.pocet_ludi}
@@ -33,10 +33,12 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     (Skopírujte vyššie uvedený odkaz a vložte ho do prehliadača v prípade nefunkčnosti automatického prekliku.)
 
     Bez Vášho potvrdenia rezervácie nebude možné Vašu rezerváciu prijať.
+
+    UPOZORNENIE: Po prijatí alebo zamietnutí rezervácie Vám príde potvrdzujúci e-mail.
     """
     html_message = f"""
     Dobrý deň,<br/>
-    Vašu rezerváciu je potrebné potvrdiť kliknutím na nižšie uvedený odkaz.<br/><br/>
+    Vašu rezerváciu je pred vybavením potrebné potvrdiť kliknutím na nižšie uvedený odkaz.<br/><br/>
 
     <b>Detaily Vašej rezervácie:</b><br/>
     <b>Počet ľudí:</b> {reservation.pocet_ludi}<br/>
@@ -53,7 +55,9 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
 
     (Skopírujte vyššie uvedený odkaz a vložte ho do prehliadača v prípade nefunkčnosti automatického prekliku.)<br/><br/>
 
-    Bez Vášho potvrdenia rezervácie nebude možné Vašu rezerváciu prijať.
+    Bez Vášho potvrdenia rezervácie nebude možné Vašu rezerváciu prijať.<br/><br/>
+
+    <b>UPOZORNENIE:</b> Po prijatí alebo zamietnutí rezervácie Vám príde potvrdzujúci e-mail.
     """
     admin_email = AdminEmail.objects.all().first()
     send_mail(
@@ -131,10 +135,10 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
 def notify_customer_about_accepted_or_declined_reservation(reservation: Reservation) -> None:
     if reservation.stav == Reservation.Stavy.PRIJATA:
         subject = "El Nacional - Rezervácia prijatá"
-        message_text = "Vaša rezervácia bola prijatá! Tešíme sa na Vás."
+        message_text = "Vaša rezervácia bola PRIJATÁ! Tešíme sa na Vás."
     else:
         subject = "El Nacional - Rezervácia zamietnutá"
-        message_text = "Vaša rezervácia bola zamietnutá!"
+        message_text = "Vaša rezervácia bola ZAMIETNUTÁ!"
     aktivity = get_only_nazov_for_each_aktivita_from_reservation(reservation)
     plain_text_message = f"""
     Dobrý deň,
