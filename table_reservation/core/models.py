@@ -30,6 +30,7 @@ class Reservation(models.Model):
         max_length=40,
         choices=Stavy.choices
     )
+    poznamka_administratora = models.TextField(verbose_name="Poznámka administrátora", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Vytvorené")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Upravené")
 

@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from reservations.forms import CreateReservationForm
+from reservations.forms import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from reservations.helpers import *
@@ -99,3 +99,31 @@ def all_reservations(request):
             "number_of_reservations_per_page": number_of_reservations_per_page
         }
     return render(request, 'reservations/all_reservations.html', context=context)
+
+
+@login_required
+def edit_or_show_poznamka_administratora(request, reservation_uuid4: uuid.UUID):
+    reservation = Reservation.objects.all().filter(uuid_identificator=reservation_uuid4).first()
+    if not reservation:
+        messages.warning(request, f'Zadaná rezervácia v systéme neexistuje.')
+        return redirect("all_reservations")
+    if request.method == "GET":
+        form = EditPoznamkaAdministratora(instance=reservation)
+        context = {
+            'form': form,
+            "reservation": reservation
+        }
+        return render(request, 'reservations/edit_poznamka_administratora.html', context=context)
+    if request.method == "POST":
+        form = EditPoznamkaAdministratora(data=request.POST, instance=reservation)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Úspešne ste pridali poznámku k rezervácii s ID {reservation.id}.")
+        else:
+            messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
+            context = {
+                "form": form,
+                "reservation": reservation
+            }
+            return render(request, 'reservations/edit_poznamka_administratora.html', context=context)
+        return redirect("all_reservations")

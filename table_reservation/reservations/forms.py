@@ -8,7 +8,7 @@ class CreateReservationForm(ModelForm):
     captcha = ReCaptchaField()
     class Meta:
         model = Reservation
-        exclude = ('uuid_identificator', 'stav')
+        exclude = ('uuid_identificator', 'stav', 'poznamka_administratora')
         widgets = {
             'datum': forms.DateInput(format=('%d.%m.%Y'), attrs={'class':'form-control', 'placeholder':'Vyberte dátum', 'type':'date'}),
             'cas': forms.TimeInput(format=('%H:%M'), attrs={'class':'form-control', 'placeholder':'Vyberte čas', 'type':'time'}),
@@ -37,3 +37,7 @@ class CreateReservationForm(ModelForm):
         if cas > cas_rezervacii_do or cas < cas_rezervacii_od:
             raise ValidationError(f'Čas rezervácie musí byť medzi {cas_rezervacii_od.strftime("%H:%M")} až {cas_rezervacii_do.strftime("%H:%M")}.')
         
+class EditPoznamkaAdministratora(ModelForm):
+    class Meta:
+        model = Reservation
+        fields = ['poznamka_administratora']

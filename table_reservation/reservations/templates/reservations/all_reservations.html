@@ -20,6 +20,7 @@
                       <th>Vytvorené</th>
                       <th>Zmenené</th>
                       <th>UUID4</th>
+                      <th>Poznámka</th>
                       <th>Prijať</th>
                       <th>Zamietnuť</th>
                       <th>Potvrdiť e-mail rezervácie</th>
@@ -41,6 +42,21 @@
                             <td>{{ reservation.created_at }}</td>
                             <td>{{ reservation.updated_at }}</td>
                             <td>{{ reservation.uuid_identificator }}</td>
+                            <td>
+                                {% if reservation.poznamka_administratora %}
+                                    <a href="{% url 'edit_or_show_poznamka_administratora' reservation.uuid_identificator %}">
+                                        <button class="btn btn-primary">
+                                            Zobraziť poznámku
+                                        </button>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'edit_or_show_poznamka_administratora' reservation.uuid_identificator %}">
+                                        <button class="btn btn-outline-primary">
+                                            Pridať poznámku
+                                        </button>
+                                    </a>
+                                {% endif %}
+                            </td>
                             <td>
                                 <a href="{% url 'accept_reservation' reservation.uuid_identificator %}">
                                     <button class="btn btn-success">
