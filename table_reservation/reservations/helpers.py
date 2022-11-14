@@ -13,10 +13,13 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     url_to_confirm_reservation = request.build_absolute_uri(reverse('confirm_reservation_by_user', args=(reservation.uuid_identificator, )))
     aktivity = get_only_nazov_for_each_aktivita_from_reservation(reservation)
     plain_text_message = f"""
-    Dobrý deň,
-    Vašu rezerváciu je pred vybavením potrebné potvrdiť kliknutím na nižšie uvedený odkaz.
+    Hola Amigo!
+    Sme radi, že si sa rozhodol stráviť večer s nami v EL NACIONAL!
 
-    Detaily Vašej rezervácie:
+    Nezabudni potvrdiť svoju rezerváciu kliknutím na nasledujúci odkaz, inak bude tvoja rezervácia neplatná:
+    {url_to_confirm_reservation}
+
+    Detail tvojej rezervácie:
     Počet ľudí: {reservation.pocet_ludi}
     Dátum: {reservation.datum.strftime("%d.%m.%Y")}
     Čas: {reservation.cas.strftime("%H:%M")}
@@ -27,25 +30,21 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     E-mail: {reservation.email}
     Správa: {reservation.sprava if reservation.sprava else '-'}
 
-    Pre potvrdenie Vašej rezervácie stlačte nasledovný odkaz:
+    Hneď ako tvoju rezerváciu spracujeme, pošleme ti potvrdzujúci e-mail.
 
-    {url_to_confirm_reservation}
+    Ďakujeme!
+    Muchas gracias!
 
-    (Skopírujte vyššie uvedený odkaz a vložte ho do prehliadača v prípade nefunkčnosti automatického prekliku.)
-
-    Bez Vášho potvrdenia rezervácie nebude možné Vašu rezerváciu prijať.
-
-    UPOZORNENIE: Po prijatí alebo zamietnutí rezervácie Vám príde potvrdzujúci e-mail.
-
-    Ďakujeme.
     Tím El Nacional
-    https://elnacional.sk
     """
     html_message = f"""
-    Dobrý deň,<br/>
-    Vašu rezerváciu je pred vybavením potrebné potvrdiť kliknutím na nižšie uvedený odkaz.<br/><br/>
+    <b>Hola Amigo!</b><br/>
+    Sme radi, že si sa rozhodol stráviť večer s nami v <b>EL NACIONAL</b>!<br/><br/>
 
-    <b>Detaily Vašej rezervácie:</b><br/>
+    <b>Nezabudni potvrdiť svoju rezerváciu kliknutím na nasledujúci odkaz, inak bude tvoja rezervácia neplatná:</b><br/>
+    <a href="{url_to_confirm_reservation}">{url_to_confirm_reservation}</a><br/><br/>
+
+    <b>Detail tvojej rezervácie:</b><br/>
     <b>Počet ľudí:</b> {reservation.pocet_ludi}<br/>
     <b>Dátum:</b> {reservation.datum.strftime("%d.%m.%Y")}<br/>
     <b>Čas:</b> {reservation.cas.strftime("%H:%M")}<br/>
@@ -56,18 +55,12 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     <b>E-mail:</b> {reservation.email}<br/>
     <b>Správa:</b> {reservation.sprava if reservation.sprava else '-'}<br/><br/>
 
-    Pre potvrdenie Vašej rezervácie stlačte nasledovný odkaz:<br/>
-    <a href="{url_to_confirm_reservation}">{url_to_confirm_reservation}</a><br/><br/>
+    Hneď ako tvoju rezerváciu spracujeme, pošleme ti potvrdzujúci e-mail.<br/><br/>
 
-    (Skopírujte vyššie uvedený odkaz a vložte ho do prehliadača v prípade nefunkčnosti automatického prekliku.)<br/><br/>
+    Ďakujeme!<br/>
+    <b>Muchas gracias!</b><br/><br/>
 
-    Bez Vášho potvrdenia rezervácie nebude možné Vašu rezerváciu prijať.<br/><br/>
-
-    <b>UPOZORNENIE:</b> Po prijatí alebo zamietnutí rezervácie Vám príde potvrdzujúci e-mail.<br/><br/>
-
-    Ďakujeme.<br/>
-    Tím El Nacional<br/>
-    <a href="https://elnacional.sk">https://elnacional.sk</a>
+    <i>Tím El Nacional</i>
     """
     admin_email = AdminEmail.objects.all().first()
     send_mail(
@@ -124,10 +117,10 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
     <b>E-mail:</b> {reservation.email}<br/>
     <b>Správa:</b> {reservation.sprava if reservation.sprava else '-'}<br/><br/>
 
-    Pre <b>prijatie</b> rezervácie stlačte nasledovný odkaz:<br/>
+    Pre <b>PRIJATIE</b> rezervácie stlačte nasledovný odkaz:<br/>
     <a href="{url_to_accept_reservation}">{url_to_accept_reservation}</a><br/><br/>
 
-    Pre <b>zamietnutie</b> rezervácie stlačte nasledovný odkaz:<br/>
+    Pre <b>ZAMIETNUTIE</b> rezervácie stlačte nasledovný odkaz:<br/>
     <a href="{url_to_decline_reservation}">{url_to_decline_reservation}</a><br/><br/>
 
     (Skopírujte vyššie uvedený odkaz a vložte ho do prehliadača v prípade nefunkčnosti automatického prekliku.)
@@ -147,17 +140,28 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
 def notify_customer_about_accepted_or_declined_reservation(reservation: Reservation) -> None:
     if reservation.stav == Reservation.Stavy.PRIJATA:
         subject = "El Nacional - Rezervácia prijatá"
-        message_text = "Vaša rezervácia bola PRIJATÁ! Tešíme sa na Vás."
+        message_text = "Tvoja rezervácia bola PRIJATÁ!"
+        html_message_text = "Tvoja rezervácia bola <b>PRIJATÁ</b>!"
+        signature_html_text = "Ďakujeme, že si si vybral <b>EL NACIONAL</b>!"
+        signature_text = "Ďakujeme, že si si vybral EL NACIONAL!"
     else:
         subject = "El Nacional - Rezervácia zamietnutá"
-        message_text = "Vaša rezervácia bola ZAMIETNUTÁ!"
+        message_text = """Tvoja rezervácia bola ZAMIETNUTÁ!
+        Prosím, skontroluj detaily tvojej rezervácie a skúsime to spoločne napraviť!
+        """
+        html_message_text = """
+        Tvoja rezervácia bola <b>ZAMIETNUTÁ</b>!<br/><br/>
+        <b>Prosím, skontroluj detaily tvojej rezervácie a skúsime to spoločne napraviť!</b>
+        """
+        signature_html_text = "Ďakujeme!"
+        signature_text = "Ďakujeme!"
     aktivity = get_only_nazov_for_each_aktivita_from_reservation(reservation)
     plain_text_message = f"""
     Dobrý deň,
     
     {message_text}
     
-    Detaily Vašej rezervácie:
+    Detaily tvojej rezervácie:
     Počet ľudí: {reservation.pocet_ludi}
     Dátum: {reservation.datum.strftime("%d.%m.%Y")}
     Čas: {reservation.cas.strftime("%H:%M")}
@@ -168,16 +172,18 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     E-mail: {reservation.email}
     Správa: {reservation.sprava if reservation.sprava else '-'}
 
-    Ďakujeme.
+    V prípade akéhokoľvek problému nás, prosím, kontaktujte na tel. čísle: +421 903 470 561
+
+    {signature_text}
+    Muchas gracias!
     Tím El Nacional
-    https://elnacional.sk
     """
     html_message = f"""
     Dobrý deň,<br/><br/>
     
-    {message_text}<br/><br/>
+    {html_message_text}<br/><br/>
     
-    <b><u>Detaily Vašej rezervácie:</u></b><br/>
+    <b>Detaily tvojej rezervácie:</b><br/>
     <b>Počet ľudí:</b> {reservation.pocet_ludi}<br/>
     <b>Dátum:</b> {reservation.datum.strftime("%d.%m.%Y")}<br/>
     <b>Čas:</b> {reservation.cas.strftime("%H:%M")}<br/>
@@ -188,9 +194,11 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     <b>E-mail:</b> {reservation.email}<br/>
     <b>Správa:</b> {reservation.sprava if reservation.sprava else '-'}<br/><br/>
 
-    Ďakujeme.<br/>
-    Tím El Nacional<br/>
-    <a href="https://elnacional.sk">https://elnacional.sk</a>
+    V prípade akéhokoľvek problému nás, prosím, kontaktujte na tel. čísle: <a href="tel:+421903470561">+421 903 470 561</a><br/><br/>
+
+    {signature_html_text}<br/>
+    <b>Muchas gracias!</b><br/>
+    <i>Tím El Nacional</i>
     """
     admin_email = AdminEmail.objects.all().first()
     send_mail(
