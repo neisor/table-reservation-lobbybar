@@ -97,7 +97,8 @@ def all_reservations(request):
             search_value_id = 0
         all_reservations = Reservation.objects.all() \
             .filter(
-                Q(id=search_value_id) | Q(uuid_identificator=search_value_uuid)
+                Q(id=search_value_id) | Q(uuid_identificator=search_value_uuid) | Q(meno=search_value) | Q(priezvisko=search_value) | \
+                Q(sprava=search_value) | Q(telefonne_cislo=search_value)
             ) \
             .order_by('-id')  # Ordered by id since the id is always last id + 1
     else:
