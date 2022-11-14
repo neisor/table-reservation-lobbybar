@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from reservations.forms import *
 from django.contrib import messages
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from reservations.helpers import *
 from core.models import Reservation, PovolenyCas
@@ -84,7 +85,23 @@ def decline_reservation(request, reservation_uuid4: uuid.UUID):
 
 @login_required
 def all_reservations(request):
-    all_reservations = Reservation.objects.all().order_by('-id')  # Ordered by id since the id is always last id + 1
+    search_value = request.GET.get('search')
+    if search_value:
+        try:
+            search_value_uuid = uuid.UUID(search_value)  # Try to convert search string to UUID
+        except ValueError:
+            search_value_uuid = uuid.UUID(int=1)
+        try:
+            search_value_id = int(search_value)  # Try to convert search string to integer
+        except ValueError:
+            search_value_id = 0
+        all_reservations = Reservation.objects.all() \
+            .filter(
+                Q(id=search_value_id) | Q(uuid_identificator=search_value_uuid)
+            ) \
+            .order_by('-id')  # Ordered by id since the id is always last id + 1
+    else:
+        all_reservations = Reservation.objects.all().order_by('-id')  # Ordered by id since the id is always last id + 1
     number_of_reservations_per_page = 25 # Show 25 reservations per page.
     if request.GET.get("zobrazitVsetko"):
         context = {"all_reservations": all_reservations}

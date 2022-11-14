@@ -2,109 +2,129 @@
 {% block content %}
     <h1 class="text-center">Všetky rezervácie</h1>
 
+    <div class="container">
+        <form id="search_form" method="GET">
+            <div class="row">
+                <div class="col">
+                    <input type="search" id="search" class="form-control" name="search" placeholder="Vyhľadávanie">
+                </div>
+                <div class="col">
+                    <button class="btn btn-success" type="submit" form="search_form">Vyhľadať</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="container-fluid">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                      <th>Stav</th>
-                      <th>ID</th>
-                      <th>Meno</th>
-                      <th>Priezvisko</th>
-                      <th>Dátum</th>
-                      <th>Čas</th>
-                      <th>Počet ľudí</th>
-                      <th>E-mail</th>
-                      <th>Tel. č.</th>
-                      <th>Správa</th>
-                      <th>UUID4</th>
-                      <th>Poznámka administrátora</th>
-                      <th>Prijať</th>
-                      <th>Zamietnuť</th>
-                      <th>Potvrdiť e-mail rezervácie</th>
-                      <th>Vytvorené</th>
-                      <th>Zmenené</th>
-                    </tr>
-                </thead>
-                <tbody>        
-                    {% for reservation in all_reservations %}
+        {% if not all_reservations %}
+            <h5 class="text-center text-danger mt-4">Neexistuje žiadna rezervácia.</h5>
+            <p class="text-center">
+                Skontrolujte si či nevyhľadávate rezerváciu, ktorá neexistuje.<br/>
+                Prejsť na <a href="{% url 'all_reservations' %}">všetky rezervácie bez filtrovania</a>.
+            </p>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>
-                                {% if reservation.stav == "PRIJATA" %}
-                                    <span class="text-success">
-                                {% elif reservation.stav == "ZAMIETNUTA" %}
-                                    <span class="text-danger">
-                                {% elif reservation.stav == "EMAILOVA_ADRESA_POTVRDENA" %}
-                                    <span class="text-primary">
-                                {% else %}
-                                    <span class="text-dark">
-                                {% endif %}
-                                        <b>{{ reservation.get_stav_display }}</b>
-                                </span>
-                            </td>
-                            <td>{{ reservation.id }}</td>
-                            <td>{{ reservation.meno }}</td>
-                            <td>{{ reservation.priezvisko }}</td>
-                            <td>{{ reservation.datum }}</td>
-                            <td>{{ reservation.cas }}</td>
-                            <td>{{ reservation.pocet_ludi }}</td>
-                            <td>{{ reservation.email }}</td>
-                            <td>{{ reservation.telefonne_cislo }}</td>
-                            <td>
-                                {% if reservation.sprava %}
-                                    <a href="{% url 'show_message_from_user' reservation.uuid_identificator %}">
-                                        <button class="btn btn-dark">
-                                            Zobraziť správu
-                                        </button>
-                                    </a>
-                                {% else %}
-                                    Žiadna správa
-                                {% endif %}
-                            </td>
-                            <td>{{ reservation.uuid_identificator }}</td>
-                            <td>
-                                {% if reservation.poznamka_administratora %}
-                                    <a href="{% url 'edit_or_show_poznamka_administratora' reservation.uuid_identificator %}">
-                                        <button class="btn btn-primary">
-                                            Zobraziť poznámku
-                                        </button>
-                                    </a>
-                                {% else %}
-                                    <a href="{% url 'edit_or_show_poznamka_administratora' reservation.uuid_identificator %}">
-                                        <button class="btn btn-outline-primary">
-                                            Pridať poznámku
-                                        </button>
-                                    </a>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{% url 'accept_reservation' reservation.uuid_identificator %}">
-                                    <button class="btn btn-success">
-                                        Prijať rezerváciu
-                                    </button>
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'decline_reservation' reservation.uuid_identificator %}">
-                                    <button class="btn btn-danger">
-                                        Zamietnuť rezerváciu
-                                    </button>
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'confirm_reservation_by_user' reservation.uuid_identificator %}">
-                                    <button class="btn btn-info">
-                                        Potvrdiť e-mail rezervácie
-                                    </button>
-                                </a>
-                            </td>
-                            <td>{{ reservation.created_at }}</td>
-                            <td>{{ reservation.updated_at }}</td>
+                        <th>Stav</th>
+                        <th>ID</th>
+                        <th>Meno</th>
+                        <th>Priezvisko</th>
+                        <th>Dátum</th>
+                        <th>Čas</th>
+                        <th>Počet ľudí</th>
+                        <th>E-mail</th>
+                        <th>Tel. č.</th>
+                        <th>Správa</th>
+                        <th>UUID4</th>
+                        <th>Poznámka administrátora</th>
+                        <th>Prijať</th>
+                        <th>Zamietnuť</th>
+                        <th>Potvrdiť e-mail rezervácie</th>
+                        <th>Vytvorené</th>
+                        <th>Zmenené</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>        
+                        {% for reservation in all_reservations %}
+                            <tr>
+                                <td>
+                                    {% if reservation.stav == "PRIJATA" %}
+                                        <span class="text-success">
+                                    {% elif reservation.stav == "ZAMIETNUTA" %}
+                                        <span class="text-danger">
+                                    {% elif reservation.stav == "EMAILOVA_ADRESA_POTVRDENA" %}
+                                        <span class="text-primary">
+                                    {% else %}
+                                        <span class="text-dark">
+                                    {% endif %}
+                                            <b>{{ reservation.get_stav_display }}</b>
+                                    </span>
+                                </td>
+                                <td>{{ reservation.id }}</td>
+                                <td>{{ reservation.meno }}</td>
+                                <td>{{ reservation.priezvisko }}</td>
+                                <td>{{ reservation.datum }}</td>
+                                <td>{{ reservation.cas }}</td>
+                                <td>{{ reservation.pocet_ludi }}</td>
+                                <td>{{ reservation.email }}</td>
+                                <td>{{ reservation.telefonne_cislo }}</td>
+                                <td>
+                                    {% if reservation.sprava %}
+                                        <a href="{% url 'show_message_from_user' reservation.uuid_identificator %}">
+                                            <button class="btn btn-dark">
+                                                Zobraziť správu
+                                            </button>
+                                        </a>
+                                    {% else %}
+                                        Žiadna správa
+                                    {% endif %}
+                                </td>
+                                <td>{{ reservation.uuid_identificator }}</td>
+                                <td>
+                                    {% if reservation.poznamka_administratora %}
+                                        <a href="{% url 'edit_or_show_poznamka_administratora' reservation.uuid_identificator %}">
+                                            <button class="btn btn-primary">
+                                                Zobraziť poznámku
+                                            </button>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'edit_or_show_poznamka_administratora' reservation.uuid_identificator %}">
+                                            <button class="btn btn-outline-primary">
+                                                Pridať poznámku
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'accept_reservation' reservation.uuid_identificator %}">
+                                        <button class="btn btn-success">
+                                            Prijať rezerváciu
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'decline_reservation' reservation.uuid_identificator %}">
+                                        <button class="btn btn-danger">
+                                            Zamietnuť rezerváciu
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'confirm_reservation_by_user' reservation.uuid_identificator %}">
+                                        <button class="btn btn-info">
+                                            Potvrdiť e-mail rezervácie
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>{{ reservation.created_at }}</td>
+                                <td>{{ reservation.updated_at }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
         <div class="pagination">
             <span class="step-links">
@@ -131,6 +151,8 @@
                 {% endif %}
             </span>
         </div>
+
+    {% endif %}
 
     </div>
 
