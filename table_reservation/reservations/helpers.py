@@ -25,6 +25,7 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     Priezvisko: {reservation.priezvisko}
     Tel. č.: {reservation.telefonne_cislo}
     E-mail: {reservation.email}
+    Správa: {reservation.sprava if reservation.sprava else '-'}
 
     Pre potvrdenie Vašej rezervácie stlačte nasledovný odkaz:
 
@@ -52,7 +53,8 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     <b>Meno:</b> {reservation.meno}<br/>
     <b>Priezvisko:</b> {reservation.priezvisko}<br/>
     <b>Tel. č.:</b> {reservation.telefonne_cislo}<br/>
-    <b>E-mail:</b> {reservation.email}<br/><br/>
+    <b>E-mail:</b> {reservation.email}<br/>
+    <b>Správa:</b> {reservation.sprava if reservation.sprava else '-'}<br/><br/>
 
     Pre potvrdenie Vašej rezervácie stlačte nasledovný odkaz:<br/>
     <a href="{url_to_confirm_reservation}">{url_to_confirm_reservation}</a><br/><br/>
@@ -96,6 +98,7 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
     Priezvisko: {reservation.priezvisko}
     Tel. č.: {reservation.telefonne_cislo}
     E-mail: {reservation.email}
+    Správa: {reservation.sprava if reservation.sprava else '-'}
 
     Pre prijatie rezervácie stlačte nasledovný odkaz:
     {url_to_accept_reservation}
@@ -118,7 +121,8 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
     <b>Meno:</b> {reservation.meno}<br/>
     <b>Priezvisko:</b> {reservation.priezvisko}<br/>
     <b>Tel. č.:</b> {reservation.telefonne_cislo}<br/>
-    <b>E-mail:</b> {reservation.email}<br/><br/>
+    <b>E-mail:</b> {reservation.email}<br/>
+    <b>Správa:</b> {reservation.sprava if reservation.sprava else '-'}<br/><br/>
 
     Pre <b>prijatie</b> rezervácie stlačte nasledovný odkaz:<br/>
     <a href="{url_to_accept_reservation}">{url_to_accept_reservation}</a><br/><br/>
@@ -162,6 +166,7 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     Priezvisko: {reservation.priezvisko}
     Tel. č.: {reservation.telefonne_cislo}
     E-mail: {reservation.email}
+    Správa: {reservation.sprava if reservation.sprava else '-'}
 
     Ďakujeme.
     Tím El Nacional
@@ -180,7 +185,8 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     <b>Meno:</b> {reservation.meno}<br/>
     <b>Priezvisko:</b> {reservation.priezvisko}<br/>
     <b>Tel. č.:</b> {reservation.telefonne_cislo}<br/>
-    <b>E-mail:</b> {reservation.email}<br/><br/>
+    <b>E-mail:</b> {reservation.email}<br/>
+    <b>Správa:</b> {reservation.sprava if reservation.sprava else '-'}<br/><br/>
 
     Ďakujeme.<br/>
     Tím El Nacional<br/>
