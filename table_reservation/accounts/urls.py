@@ -5,6 +5,7 @@ from .views import *
 urlpatterns = [
     path("login/", login_user, name="login"),
     path("logout/", logout_user, name="logout"),
+    path("change_password/", change_password, name="change_password"),
     # path("register/", register_user, name="register"),
     
     # Password reset paths:
