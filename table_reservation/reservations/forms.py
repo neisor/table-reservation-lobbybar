@@ -23,6 +23,10 @@ class CreateReservationForm(ModelForm):
         cleaned_data = super().clean()
         datum = cleaned_data.get("datum")
         cas = cleaned_data.get("cas")
+        if type(datum) != datetime.date:
+            raise ValidationError('Dátum rezervácie ste nezadali v správnom formáte.')  # Needed in case when user does not use date-picker
+        if type(cas) != datetime.time:
+            raise ValidationError('Čas rezervácie ste nezadali v správnom formáte.')  # Needed in case when user does not use time-picker
         datum_a_cas_z_formulara = datetime.datetime.combine(datum, cas)
         now_plus_2_hours = datetime.datetime.now() + datetime.timedelta(hours=2)  # Do not allow for a reservation sooner than 2 hours from now
         # Get casy from PovolenyCas model
