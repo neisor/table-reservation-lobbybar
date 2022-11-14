@@ -128,7 +128,7 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
     <a href="{url_to_accept_reservation}">{url_to_accept_reservation}</a><br/><br/>
 
     Pre <b>zamietnutie</b> rezervácie stlačte nasledovný odkaz:<br/>
-    <a href="{url_to_accept_reservation}">{url_to_decline_reservation}</a><br/><br/>
+    <a href="{url_to_decline_reservation}">{url_to_decline_reservation}</a><br/><br/>
 
     (Skopírujte vyššie uvedený odkaz a vložte ho do prehliadača v prípade nefunkčnosti automatického prekliku.)
     """
