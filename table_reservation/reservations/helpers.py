@@ -150,11 +150,11 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
         signature_text = "Ďakujeme, že si si vybral EL NACIONAL!"
     else:
         subject = "El Nacional - Rezervácia zamietnutá"
-        message_text = """Tvoja rezervácia bola ZAMIETNUTÁ!
+        message_text = """Mrzí nás to, ale tvoja rezervácia bola ZAMIETNUTÁ!
         Prosím, skontroluj detaily tvojej rezervácie a skúsime to spoločne napraviť!
         """
         html_message_text = """
-        Tvoja rezervácia bola <b>ZAMIETNUTÁ</b>!<br/><br/>
+        Mrzí nás to, ale tvoja rezervácia bola <b>ZAMIETNUTÁ</b>!<br/><br/>
         <b>Prosím, skontroluj detaily tvojej rezervácie a skúsime to spoločne napraviť!</b>
         """
         signature_html_text = "Ďakujeme!"
@@ -180,7 +180,7 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
 
     {signature_text}
     Muchas gracias!
-    
+
     Tím El Nacional
     """
     html_message = f"""
