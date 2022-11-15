@@ -63,14 +63,15 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     <i>Tím El Nacional</i>
     """
     admin_email = AdminEmail.objects.all().first()
-    send_mail(
-        subject='El Nacional - Potvrďťe Vašu rezerváciu',
-        message=plain_text_message,
-        from_email=admin_email.email,
-        recipient_list=[reservation.email],
-        html_message=html_message,
-        fail_silently=False,
-    )
+    if admin_email:
+        send_mail(
+            subject='El Nacional - Potvrďťe Vašu rezerváciu',
+            message=plain_text_message,
+            from_email=admin_email.email,
+            recipient_list=[reservation.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
     return
 
 def notify_administrator_to_accept_or_decline_reservation(request, reservation: Reservation) -> None:
@@ -126,14 +127,15 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
     (Skopírujte vyššie uvedený odkaz a vložte ho do prehliadača v prípade nefunkčnosti automatického prekliku.)
     """
     admin_email = AdminEmail.objects.all().first()
-    send_mail(
-        subject=f'El Nacional - Nová rezervácia - ID: {reservation.id}',
-        message=plain_text_message,
-        from_email=admin_email.email,
-        recipient_list=[admin_email.email],
-        html_message=html_message,
-        fail_silently=False,
-    )
+    if admin_email:
+        send_mail(
+            subject=f'El Nacional - Nová rezervácia - ID: {reservation.id}',
+            message=plain_text_message,
+            from_email=admin_email.email,
+            recipient_list=[admin_email.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
     return
 
 
@@ -201,12 +203,13 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     <i>Tím El Nacional</i>
     """
     admin_email = AdminEmail.objects.all().first()
-    send_mail(
-        subject=subject,
-        message=plain_text_message,
-        from_email=admin_email.email,
-        recipient_list=[reservation.email],
-        html_message=html_message,
-        fail_silently=False,
-    )
+    if admin_email:
+        send_mail(
+            subject=subject,
+            message=plain_text_message,
+            from_email=admin_email.email,
+            recipient_list=[reservation.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
     return
