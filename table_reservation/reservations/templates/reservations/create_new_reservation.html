@@ -5,6 +5,12 @@
     {% if not povoleny_cas %}
         <h6 class="text-center text-danger">Nie je vytvorený povolený čas! Je potrebné ho vytvoriť predtým, ako zákazníci budú môcť vytvárať nové rezervácie.</h6>
     {% endif %}
+    {% if not admin_email %}
+        <h6 class="text-center text-danger">Nie je vytvorený administrátorský e-mail! Je potrebné ho vytvoriť predtým, ako zákazníci budú môcť vytvárať nové rezervácie.</h6>
+    {% endif %}
+    {% if not aktivita %}
+        <h6 class="text-center text-danger">Nie je vytvorená žiadna aktivita! Je potrebné ju vytvoriť predtým, ako zákazníci budú môcť vytvárať nové rezervácie.</h6>
+    {% endif %}
 
     <div class="container-lg kontajner">
         {% load crispy_forms_tags %}

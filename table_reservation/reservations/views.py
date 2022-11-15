@@ -4,16 +4,20 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from reservations.helpers import *
-from core.models import Reservation, PovolenyCas
+from core.models import Reservation, PovolenyCas, AdminEmail, Aktivita
 import uuid
 from django.core.paginator import Paginator
 
 def create_new_reservation(request):
     if request.method == "GET":
-        povoleny_cas = PovolenyCas.objects.all().first()
+        povoleny_cas = PovolenyCas.objects.exists()
+        admin_email = AdminEmail.objects.exists()
+        aktivita = Aktivita.objects.exists()
         context = {
             'form': CreateReservationForm,
-            'povoleny_cas': povoleny_cas
+            'povoleny_cas': povoleny_cas,
+            'admin_email': admin_email,
+            'aktivita': aktivita
         }
         return render(request, 'reservations/create_new_reservation.html', context=context)
     if request.method == "POST":
