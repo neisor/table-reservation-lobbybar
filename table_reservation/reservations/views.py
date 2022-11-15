@@ -100,7 +100,7 @@ def all_reservations(request):
                 Q(id=search_value_id) | Q(uuid_identificator=search_value_uuid) | Q(meno__icontains=search_value) | Q(priezvisko__icontains=search_value) | \
                 Q(sprava__icontains=search_value) | Q(telefonne_cislo__icontains=search_value) | Q(email__icontains=search_value)
             ) \
-            .order_by('-id')  # Ordered by id since the id is always last id + 1
+            .order_by('-id')  # Ordered by id since the id is always last id + 1 (so it's by the newest reservations)
     else:
         all_reservations = Reservation.objects.all().order_by('-id')  # Ordered by id since the id is always last id + 1
     number_of_reservations_per_page = 25 # Show 25 reservations per page.
