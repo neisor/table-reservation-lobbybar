@@ -14,6 +14,7 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     aktivity = get_only_nazov_for_each_aktivita_from_reservation(reservation)
     plain_text_message = f"""
     Hola Amigo!
+
     Sme radi, že si sa rozhodol stráviť večer s nami v EL NACIONAL!
 
     Nezabudni potvrdiť svoju rezerváciu kliknutím na nasledujúci odkaz, inak bude tvoja rezervácia neplatná:
@@ -38,7 +39,8 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     Tím El Nacional
     """
     html_message = f"""
-    <b>Hola Amigo!</b><br/>
+    <b>Hola Amigo!</b><br/><br/>
+
     Sme radi, že si sa rozhodol stráviť večer s nami v <b>EL NACIONAL</b>!<br/><br/>
 
     <b>Nezabudni potvrdiť svoju rezerváciu kliknutím na nasledujúci odkaz, inak bude tvoja rezervácia neplatná:</b><br/>
@@ -159,7 +161,7 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
         signature_text = "Ďakujeme!"
     aktivity = get_only_nazov_for_each_aktivita_from_reservation(reservation)
     plain_text_message = f"""
-    Dobrý deň,
+    Hola Amigo!
     
     {message_text}
     
@@ -178,10 +180,11 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
 
     {signature_text}
     Muchas gracias!
+    
     Tím El Nacional
     """
     html_message = f"""
-    Dobrý deň,<br/><br/>
+    Hola Amigo!<br/><br/>
     
     {html_message_text}<br/><br/>
     
@@ -199,7 +202,8 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     V prípade akéhokoľvek problému nás, prosím, kontaktujte na tel. čísle: <a href="tel:+421903470561">+421 903 470 561</a><br/><br/>
 
     {signature_html_text}<br/>
-    <b>Muchas gracias!</b><br/>
+    <b>Muchas gracias!</b><br/><br/>
+
     <i>Tím El Nacional</i>
     """
     admin_email = AdminEmail.objects.all().first()
