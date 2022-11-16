@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'reservations.apps.ReservationsConfig',
     'accounts.apps.AccountsConfig',
+    'captcha'
 ]
 
 MIDDLEWARE = [
@@ -146,3 +147,12 @@ EMAIL_HOST_PASSWORD = "r3zervacieElNacional"
 EMAIL_HOST = "smtp.websupport.sk"
 EMAIL_PORT = "465"
 EMAIL_USE_SSL = True
+
+# reCAPTCHA setup
+if os.environ.get("USE_RECAPTCHA"):
+    RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY")  # Get the key from reCAPTCHA admin console
+    RECAPTCHA_PRIVATE_KEY = os.environ.get("RECAPTCHA_PRIVATE_KEY")  # Get the key from reCAPTCHA admin console
+else:
+    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']  # Use default keys for testing purposes only and silence error
+    RECAPTCHA_PUBLIC_KEY = 'myRecaptchaTestKey123'  # Get the key from reCAPTCHA admin console
+    RECAPTCHA_PRIVATE_KEY = 'myRecaptchaTestKey123'  # Get the key from reCAPTCHA admin console
