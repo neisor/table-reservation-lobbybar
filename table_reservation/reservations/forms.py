@@ -3,9 +3,10 @@ from django import forms
 from core.models import Reservation, PovolenyCas
 import datetime
 from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 
 class CreateReservationForm(ModelForm):
-    captcha = ReCaptchaField()
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
     class Meta:
         model = Reservation
         exclude = ('uuid_identificator', 'stav', 'poznamka_administratora')
