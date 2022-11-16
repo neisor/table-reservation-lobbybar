@@ -154,3 +154,5 @@ if os.environ.get("USE_RECAPTCHA"):
     RECAPTCHA_PRIVATE_KEY = os.environ.get("RECAPTCHA_PRIVATE_KEY")  # Get the key from reCAPTCHA admin console
 else:
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']  # Use default keys for testing purposes only and silence error
+    RECAPTCHA_PUBLIC_KEY = 'myRecaptchaTestKey123'  # Get the key from reCAPTCHA admin console
+    RECAPTCHA_PRIVATE_KEY = 'myRecaptchaTestKey123'  # Get the key from reCAPTCHA admin console
