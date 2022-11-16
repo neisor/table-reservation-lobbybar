@@ -17,7 +17,9 @@
         <form action="{% url 'create_new_reservation' %}" id="create_new_reservation_form" method="POST" enctype="multipart/form-data">
             {% crispy form %}
         </form>
-        <button class="btn btn-success mt-3" type="submit" form="create_new_reservation_form">Vytvoriť novú rezerváciu</button>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-success mt-3" type="submit" form="create_new_reservation_form">Vytvoriť novú rezerváciu</button>
+        </div>
     </div>
 
 {% endblock %}
