@@ -2,8 +2,10 @@ from django.forms import ModelForm, ValidationError
 from django import forms
 from core.models import Reservation, PovolenyCas
 import datetime
+from django.utils.safestring import mark_safe
 
 class CreateReservationForm(ModelForm):
+    privacy_policy = forms.BooleanField()
     class Meta:
         model = Reservation
         exclude = ('uuid_identificator', 'stav', 'poznamka_administratora')
@@ -16,6 +18,9 @@ class CreateReservationForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(CreateReservationForm, self).__init__(*args, **kwargs)
         self.fields['aktivita'].label = 'Ako plánujete stráviť večer u nás?'
+        self.fields['privacy_policy'].label = mark_safe(
+            'Súhlasím so <a href="https://elnacional.sk/ochrana-osobnych-udajov">spracovaním osobných údajov</a>'
+        )
 
     def clean(self):
         cleaned_data = super().clean()
