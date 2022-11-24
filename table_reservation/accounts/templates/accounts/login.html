@@ -6,12 +6,14 @@
             <p>Zadané prihlasovacie údaje nie sú platné. Skúste to znovu.</p>
         </div>
     {% endif %}
-    {% load crispy_forms_tags %}
-    <form action="{% url 'login' %}" id="login_form" method="POST" enctype="multipart/form-data">
-        {% crispy form %}
-    </form>
-    <button class="btn btn-success mt-3" type="submit" form="login_form">Prihlásiť sa</button>
-    <p class="mt-3">Ak ste <b>zabudli svoje heslo</b>, môžete si ho <a href="{% url 'reset_password' %}">zresetovať tu</a>.</p>
-    {% comment %} <p class="mt-3">Ak ešte <b>nemáte vytvorený účet</b>, odporúčame Vám <a href="{% url 'register' %}">sa zaregistrovať</a>.</p> {% endcomment %}
+    <div class="container-lg">
+        {% load crispy_forms_tags %}
+        <form action="{% url 'login' %}" id="login_form" method="POST" enctype="multipart/form-data">
+            {% crispy form %}
+        </form>
+        <button class="btn btn-success mt-3" type="submit" form="login_form">Prihlásiť sa</button>
+        <p class="mt-3">Ak ste <b>zabudli svoje heslo</b>, môžete si ho <a href="{% url 'reset_password' %}">zresetovať tu</a>.</p>
+        {% comment %} <p class="mt-3">Ak ešte <b>nemáte vytvorený účet</b>, odporúčame Vám <a href="{% url 'register' %}">sa zaregistrovať</a>.</p> {% endcomment %}
+    </div>
 </div>
 {% endblock %}
