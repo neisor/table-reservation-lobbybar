@@ -1,4 +1,4 @@
-from django.core.management import BaseCommand, CommandError
+from django.core.management import BaseCommand
 from django.contrib.auth.models import User
 from core.models import PovolenyCas, AdminEmail, Aktivita
 import datetime
