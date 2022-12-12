@@ -2,7 +2,7 @@ from django.test import LiveServerTestCase, RequestFactory
 from django.contrib.auth.models import AnonymousUser, User
 from django.test import Client
 from reservations.views import *
-from core.models import Reservation
+from core.models import Reservation, Stav
 from unittest.mock import patch
 import datetime as dt
 import uuid
@@ -33,7 +33,9 @@ class TestReservations(LiveServerTestCase):
             stav=Reservation.Stavy.NOVA
         ).save()
         self.reservation = Reservation.objects.get(uuid_identificator=self.uuid_identificator)
-    
+        self.stav = Stav.objects.create(otvorene=True)
+        self.stav.save()
+
     def _set_reservation_stav(self, reservation_uuid4, stav):
         reservation_to_test = Reservation.objects.get(uuid_identificator=reservation_uuid4)
         reservation_to_test.stav = stav
@@ -43,9 +45,27 @@ class TestReservations(LiveServerTestCase):
     def test_reservation_view(self):
         request = self.factory.get('/')
         request.user = AnonymousUser()
+        # Add support for Django messages in tests
+        setattr(request, 'session', 'session')
+        setattr(request, '_messages', FallbackStorage(request))
         response = create_new_reservation(request)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Nová žiadosť o rezerváciu")
+    
+    def test_reservation_view_closed_system(self):
+        self.stav.otvorene = not self.stav.otvorene
+        self.stav.save()
+        request = self.factory.get('/')
+        request.user = AnonymousUser()
+        # Add support for Django messages in tests
+        setattr(request, 'session', 'session')
+        setattr(request, '_messages', FallbackStorage(request))
+        response = create_new_reservation(request)
+        # Revert Stav before assertions
+        self.stav.otvorene = not self.stav.otvorene
+        self.stav.save()
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Aktuálne nie je možné vytvárať nové rezervácie")
 
     def test_all_reservations_view(self):
         request = self.factory.get('/all')

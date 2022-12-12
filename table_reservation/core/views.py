@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from core.forms import *
-from core.models import PovolenyCas, AdminEmail, Aktivita
+from core.models import PovolenyCas, AdminEmail, Aktivita, Stav
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -181,3 +181,41 @@ def delete_aktivita(request, aktivita_id: int):
     aktivita.delete()
     messages.success(request, f'Aktivita s ID {aktivita_id} bol úspešne vymazaný.')
     return redirect("all_aktivity")
+
+@login_required
+def open_or_close_system(request):
+    actual_stav = Stav.objects.all().first()
+    actual_stav.otvorene = not actual_stav.otvorene
+    actual_stav.save()
+    message_to_display = "Systém bol úspešne OTVORENÝ." if actual_stav.otvorene else 'Systém bol úspešne ZATVORENÝ.'
+    messages.success(request, message_to_display)
+    return redirect('actual_stav_systemu')
+
+@login_required
+def create_new_stav_systemu(request):
+    if request.method == "GET":
+        actual_stav = Stav.objects.all().first()
+        if actual_stav:
+            messages.warning(request, 'Stav už existuje, nemôžete vytvoriť ďalší.')
+            return redirect("actual_stav_systemu")
+        context = {
+            'form': CreateStavForm,
+        }
+        return render(request, 'core/create_new_stav_systemu.html', context=context)
+    if request.method == "POST":
+        form = CreateStavForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Úspešne ste vytvorili nový stav systému.")
+        else:
+            messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
+            context = {
+                "form": form
+            }
+            return render(request, 'core/create_new_stav_systemu.html', context=context)
+        return redirect("actual_stav_systemu")
+
+@login_required
+def actual_stav_systemu(request):
+    actual_stav = Stav.objects.all().first()
+    return render(request, 'core/actual_stav_systemu.html', context={"actual_stav": actual_stav})

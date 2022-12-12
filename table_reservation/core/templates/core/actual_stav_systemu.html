@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center mb-3">Všetky administrátorské e-maily</h1>
+
+    <div class="container text-center">
+        {% if not actual_stav %}
+            <h5 class="text-center text-danger">Zatiaľ neexistuje vytvorený stav.</h5>
+        {% else %}
+            {% if actual_stav.otvorene %}
+                <h3 class="text-success">Rezervačný systém je aktuálne OTVORENÝ <i class="bi bi-check2"></i></h3>
+                <p>Používatelia MÔŽU vytvárať rezervácie.</p>
+                <a href="{% url 'open_or_close_system' %}">
+                    <button class="btn btn-warning">
+                        Zatvoriť systém
+                    </button>
+                </a>
+            {% else %}
+                <h3 class="text-danger">Rezervačný systém je aktuálne ZATVORENÝ <i class="bi bi-exclamation-triangle-fill"></i></h3>
+                <p>Používatelia NEMÔŽU vytvárať rezervácie.</p>
+                <a href="{% url 'open_or_close_system' %}">
+                    <button class="btn btn-warning">
+                        Otvoriť systém
+                    </button>
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+{% endblock %}

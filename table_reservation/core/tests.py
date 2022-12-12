@@ -20,6 +20,8 @@ class TestCore(LiveServerTestCase):
         self.user.is_superuser=True
         self.user.is_admin=True
         self.user.save()
+        self.stav = Stav.objects.create(otvorene=True)
+        self.stav.save()
 
     def create_povoleny_cas_and_return_id(self) -> int:
         povoleny_cas = PovolenyCas(
@@ -250,3 +252,38 @@ class TestCore(LiveServerTestCase):
         response = delete_aktivita(request, instance_id)
         response.client = Client()
         self.assertRedirects(response, reverse('all_aktivity'), status_code=302, target_status_code=302, fetch_redirect_response=True)
+
+class TestStav(LiveServerTestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(
+            'admin',
+            'change-me@change-me.com',
+            'passwo123412'
+        )
+        self.user.is_staff=True
+        self.user.is_superuser=True
+        self.user.is_admin=True
+        self.user.save()
+        self.stav = Stav.objects.create(otvorene=True)
+        self.stav.save()
+
+    def test_create_new_stav_already_existing(self):
+        request = self.factory.get('/stav/new')
+        request.user = self.user
+        # Add support for Django messages in tests
+        setattr(request, 'session', 'session')
+        setattr(request, '_messages', FallbackStorage(request))
+        response = create_new_stav_systemu(request)
+        response.client = Client()
+        self.assertRedirects(response, reverse('actual_stav_systemu'), status_code=302, target_status_code=302, fetch_redirect_response=True)
+
+    def test_change_stav_systemu(self):
+        request = self.factory.get('/stav/open-or-close-system')
+        request.user = self.user
+        # Add support for Django messages in tests
+        setattr(request, 'session', 'session')
+        setattr(request, '_messages', FallbackStorage(request))
+        response = open_or_close_system(request)
+        response.client = Client()
+        self.assertRedirects(response, reverse('actual_stav_systemu'), status_code=302, target_status_code=302, fetch_redirect_response=True)

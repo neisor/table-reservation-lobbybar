@@ -68,3 +68,16 @@ class AdminEmail(models.Model):
         if not self.pk and AdminEmail.objects.exists():
             raise ValidationError('Môže existovať iba jedna inštancia administrátorského e-mailu.')
         return super(AdminEmail, self).save(*args, **kwargs)
+
+class Stav(models.Model):
+    otvorene = models.BooleanField(default=True)
+
+    def __str__(self):
+        return "Otvorené" if self.otvorene else "Zatvorené"
+
+    def save(self, *args, **kwargs):
+        # if we will not check for self.pk 
+        # then error will also get raised in update of existing model
+        if not self.pk and Stav.objects.exists():
+            raise ValidationError('Môže existovať iba jedna inštancia stavu.')
+        return super(Stav, self).save(*args, **kwargs)

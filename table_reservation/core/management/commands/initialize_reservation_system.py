@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand
 from django.contrib.auth.models import User
-from core.models import PovolenyCas, AdminEmail, Aktivita
+from core.models import PovolenyCas, AdminEmail, Aktivita, Stav
 import datetime
 
 class Command(BaseCommand):
@@ -43,5 +43,13 @@ class Command(BaseCommand):
             aktivita = Aktivita.objects.create(nazov="JEDLO")
             aktivita.save()
             self.stdout.write('Aktivita successfully created!')
+
+        self.stdout.write('\nCreating Stav')
+        if Stav.objects.exists():
+            self.stdout.write('At least 1 Stav already exists! Not creating a new one.')
+        else:
+            stav = Stav.objects.create(otvorene=True)
+            stav.save()
+            self.stdout.write('Stav successfully created!')
 
         self.stdout.write('\nDONE!')

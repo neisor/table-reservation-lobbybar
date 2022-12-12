@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Nový stav systému</h1>
+
+    <div class="container-lg">
+        {% load crispy_forms_tags %}
+        <form action="{% url 'create_new_stav_systemu' %}" id="create_new_stav_systemu_form" method="POST" enctype="multipart/form-data">
+            {% crispy form %}
+        </form>
+        <button class="btn btn-success mt-3" type="submit" form="create_new_stav_systemu_form">Vytvoriť nový stav</button>
+    </div>
+
+{% endblock %}

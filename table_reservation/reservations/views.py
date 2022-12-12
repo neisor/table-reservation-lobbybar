@@ -4,10 +4,12 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from reservations.helpers import *
-from core.models import Reservation, PovolenyCas, AdminEmail, Aktivita
+from core.models import Reservation, PovolenyCas, AdminEmail, Aktivita, Stav
 import uuid
 from django.core.paginator import Paginator
+from core.wrappers import allow_only_if_is_open
 
+@allow_only_if_is_open
 def create_new_reservation(request):
     if request.method == "GET":
         povoleny_cas = PovolenyCas.objects.exists()

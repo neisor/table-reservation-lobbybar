@@ -13,4 +13,7 @@ urlpatterns = [
     path('aktivita/new', create_new_aktivita, name="create_new_aktivita"),
     path('aktivita/edit/<int:aktivita_id>', edit_aktivita, name="edit_aktivita"),
     path('aktivita/delete/<int:aktivita_id>', delete_aktivita, name="delete_aktivita"),
+    path('stav/new', create_new_stav_systemu, name="create_new_stav_systemu"),
+    path('stav/actual-stav-systemu', actual_stav_systemu, name="actual_stav_systemu"),
+    path('stav/open-or-close-system', open_or_close_system, name="open_or_close_system"),
 ]
