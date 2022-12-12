@@ -8,7 +8,7 @@
         {% else %}
             {% if actual_stav.otvorene %}
                 <h3 class="text-success">Rezervačný systém je aktuálne OTVORENÝ <i class="bi bi-check2"></i></h3>
-                <p>Používatelia MÔŽU vytvárať rezervácie.</p>
+                <p>Používatelia MÔŽU vytvárať nové rezervácie.</p>
                 <a href="{% url 'open_or_close_system' %}">
                     <button class="btn btn-warning">
                         Zatvoriť systém
@@ -16,7 +16,7 @@
                 </a>
             {% else %}
                 <h3 class="text-danger">Rezervačný systém je aktuálne ZATVORENÝ <i class="bi bi-exclamation-triangle-fill"></i></h3>
-                <p>Používatelia NEMÔŽU vytvárať rezervácie.</p>
+                <p>Používatelia NEMÔŽU vytvárať nové rezervácie.</p>
                 <a href="{% url 'open_or_close_system' %}">
                     <button class="btn btn-warning">
                         Otvoriť systém
