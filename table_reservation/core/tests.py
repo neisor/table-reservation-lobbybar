@@ -7,6 +7,7 @@ from core.models import *
 import datetime as dt
 import uuid
 from core.views import *
+from unittest.mock import patch
 
 class TestCore(LiveServerTestCase):
     def setUp(self):
@@ -278,7 +279,8 @@ class TestStav(LiveServerTestCase):
         response.client = Client()
         self.assertRedirects(response, reverse('actual_stav_systemu'), status_code=302, target_status_code=302, fetch_redirect_response=True)
 
-    def test_change_stav_systemu(self):
+    @patch('core.views.send_email_notification_system_closed_to_admin')
+    def test_change_stav_systemu(self, mock_send_email_notification):
         request = self.factory.get('/stav/open-or-close-system')
         request.user = self.user
         # Add support for Django messages in tests

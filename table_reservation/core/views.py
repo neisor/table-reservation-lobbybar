@@ -3,6 +3,7 @@ from core.forms import *
 from core.models import PovolenyCas, AdminEmail, Aktivita, Stav
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from core.helpers import *
 
 @login_required
 def all_povolene_casy(request):
@@ -187,7 +188,12 @@ def open_or_close_system(request):
     actual_stav = Stav.objects.all().first()
     actual_stav.otvorene = not actual_stav.otvorene
     actual_stav.save()
-    message_to_display = "Systém bol úspešne OTVORENÝ." if actual_stav.otvorene else 'Systém bol úspešne ZATVORENÝ.'
+    if actual_stav.otvorene:
+        message_to_display = "Systém bol úspešne OTVORENÝ."
+        send_email_notification_system_opened_to_admin()
+    else:
+        message_to_display = "Systém bol úspešne ZATVORENÝ."
+        send_email_notification_system_closed_to_admin()
     messages.success(request, message_to_display)
     return redirect('actual_stav_systemu')
 
