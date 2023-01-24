@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.utils.safestring import mark_safe
 from reservations.forms import *
 from django.contrib import messages
 from django.db.models import Q
@@ -25,6 +26,13 @@ def create_new_reservation(request):
     if request.method == "POST":
         form = CreateReservationForm(request.POST)
         if form.is_valid():
+            date_of_new_reservation = form.cleaned_data["datum"]
+            if check_if_datum_from_reservation_is_in_nepovolene_datumy(date_to_check=date_of_new_reservation):
+                messages.error(request, mark_safe(
+                    f'Je nám ľúto, v tento deň už nie je možná rezervácia, z dôvodu naplnenia kapacity rezervácií. Kontaktujte nás na čísle: <a href="tel:+421 908 085 888">+421 908 085 888</a>'
+                    )
+                )
+                return redirect('/')
             created_reservation = form.save()
             created_reservation.stav = Reservation.Stavy.NOVA
             created_reservation.save()

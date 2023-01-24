@@ -225,3 +225,41 @@ def create_new_stav_systemu(request):
 def actual_stav_systemu(request):
     actual_stav = Stav.objects.all().first()
     return render(request, 'core/actual_stav_systemu.html', context={"actual_stav": actual_stav})
+
+@login_required
+def create_new_nepovoleny_datum(request):
+    if request.method == "GET":
+        context = {
+            'form': CreateNepovolenyDatumForm,
+        }
+        return render(request, 'core/create_new_nepovoleny_datum.html', context=context)
+    if request.method == "POST":
+        form = CreateNepovolenyDatumForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Úspešne ste vytvorili nový nepovolený dátum.")
+        else:
+            messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
+            context = {
+                "form": form
+            }
+            return render(request, 'core/create_new_nepovoleny_datum.html', context=context)
+        return redirect("all_nepovolene_datumy")
+
+@login_required
+def all_nepovolene_datumy(request):
+    nepovolene_datumy = NepovolenyDatum.objects.all().order_by('datum')
+    context = {
+        "nepovolene_datumy": nepovolene_datumy
+    }
+    return render(request, 'core/all_nepovolene_datumy.html', context=context)
+
+@login_required
+def delete_nepovoleny_datum(request, nepovoleny_datum_id: int):
+    nepovoleny_datum = NepovolenyDatum.objects.all().filter(id=nepovoleny_datum_id).first()
+    if not nepovoleny_datum:
+        messages.warning(request, f'Nepovolený dátum s ID {nepovoleny_datum_id} neexistuje.')
+        return redirect("all_nepovolene_datumy")
+    nepovoleny_datum.delete()
+    messages.success(request, f'Nepovolený dátum {nepovoleny_datum.datum} s ID {nepovoleny_datum_id} bol úspešne vymazaný.')
+    return redirect("all_nepovolene_datumy")

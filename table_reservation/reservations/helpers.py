@@ -1,6 +1,13 @@
 from django.core.mail import send_mail
-from core.models import Reservation, AdminEmail
+from core.models import Reservation, AdminEmail, NepovolenyDatum
 from django.urls import reverse
+from typing import Union
+import datetime
+
+def check_if_datum_from_reservation_is_in_nepovolene_datumy(date_to_check: datetime.date) -> bool:
+    """Returns True (boolean) if date exists in NepovolenyDatum - therefore the reservation should not be created"""
+    exists_in_nepovolene_datumy = True if NepovolenyDatum.objects.all().filter(datum=date_to_check) else False
+    return exists_in_nepovolene_datumy
 
 def get_only_nazov_for_each_aktivita_from_reservation(reservation: Reservation) -> str:
     aktivity_z_rezervacie = ""

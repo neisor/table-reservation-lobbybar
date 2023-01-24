@@ -16,4 +16,7 @@ urlpatterns = [
     path('stav/new', create_new_stav_systemu, name="create_new_stav_systemu"),
     path('stav/actual-stav-systemu', actual_stav_systemu, name="actual_stav_systemu"),
     path('stav/open-or-close-system', open_or_close_system, name="open_or_close_system"),
+    path('nepovoleny-datum/create', create_new_nepovoleny_datum, name="create_new_nepovoleny_datum"),
+    path('nepovoleny-datum/all', all_nepovolene_datumy, name="all_nepovolene_datumy"),
+    path('nepovoleny-datum/delete/<int:nepovoleny_datum_id>', delete_nepovoleny_datum, name="delete_nepovoleny_datum"),
 ]

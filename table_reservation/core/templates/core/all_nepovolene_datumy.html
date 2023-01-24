@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Všetky nepovolené dátumy</h1>
+
+    {% if not nepovolene_datumy %}
+        <h5 class="text-center text-danger">Zatiaľ neexistuje žiadny nepovolený dátum.</h5>
+    {% else %}
+        <div class="container-fluid">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>Názov</th>
+                        <th>Vymazať</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for nepovoleny_datum in nepovolene_datumy %}
+                            <tr>
+                                <td>{{ nepovoleny_datum.id }}</td>
+                                <td>{{ nepovoleny_datum.datum }}</td>
+                                
+                                <td>
+                                    <a href="{% url 'delete_nepovoleny_datum' nepovoleny_datum.id %}">
+                                        <button class="btn btn-danger">
+                                            Vymazať
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

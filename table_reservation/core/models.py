@@ -81,3 +81,16 @@ class Stav(models.Model):
         if not self.pk and Stav.objects.exists():
             raise ValidationError('Môže existovať iba jedna inštancia stavu.')
         return super(Stav, self).save(*args, **kwargs)
+
+class NepovolenyDatum(models.Model):
+    """Model for defining not allowed dates for reservations"""
+    datum = models.DateField(verbose_name="Nepovolený dátum")
+
+    def __str__(self):
+        return f"Nepovolený dátum: {self.datum}"
+    
+    def save(self, *args, **kwargs):
+        """Make sure to allow only 1 instance for 1 date"""
+        if NepovolenyDatum.objects.all().filter(datum=self.datum):
+            raise ValidationError("Môže existovať iba jeden záznam nepovoleného dátumu pre konkrétny dátum.")
+        return super(NepovolenyDatum, self).save(*args, **kwargs)
