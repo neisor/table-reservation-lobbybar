@@ -268,6 +268,10 @@ def delete_nepovoleny_datum(request, nepovoleny_datum_id: int):
 @login_required
 def create_new_kontaktne_cislo(request):
     if request.method == "GET":
+        kontaktne_cislo = KontaktneTelefonneCislo.objects.all().first()
+        if kontaktne_cislo:
+            messages.warning(request, 'Kontaktné telefónne číslo už existuje, nemôžete vytvoriť ďalšie.')
+            return redirect("all_kontaktne_cisla")
         context = {
             'form': CreateKontaktneTelefonneCisloForm,
         }
