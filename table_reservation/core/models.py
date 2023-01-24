@@ -21,7 +21,7 @@ class Reservation(models.Model):
     datum = models.DateField(verbose_name="Dátum rezervácie", validators=[future_date_only])
     cas = models.TimeField(verbose_name="Čas rezervácie")
     aktivita = models.ManyToManyField(to='Aktivita')
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{8,15}$', message="Telefónne číslo musí byť vo formáte: '+421911222333'.")
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{8,15}$', message="Telefónne číslo vo formáte: '+421911222333'.")
     telefonne_cislo = models.CharField(validators=[phone_regex], max_length=17, verbose_name="Telefónne číslo/Mobil")
     email = models.EmailField(verbose_name="E-mail")
     sprava = models.TextField(verbose_name="Správa", null=True, blank=True)
@@ -94,3 +94,18 @@ class NepovolenyDatum(models.Model):
         if NepovolenyDatum.objects.all().filter(datum=self.datum):
             raise ValidationError("Môže existovať iba jeden záznam nepovoleného dátumu pre konkrétny dátum.")
         return super(NepovolenyDatum, self).save(*args, **kwargs)
+
+class KontaktneTelefonneCislo(models.Model):
+    """Model for defining a contact number"""
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{8,15}$', message="Telefónne číslo vo formáte: '+421911222333'.")
+    telefonne_cislo = models.CharField(validators=[phone_regex], max_length=17, verbose_name="Telefónne číslo/Mobil")
+
+    def __str__(self):
+        return f"Kontaktné tel. č.: {self.telefonne_cislo}"
+
+    def save(self, *args, **kwargs):
+        # if we will not check for self.pk 
+        # then error will also get raised in update of existing model
+        if not self.pk and KontaktneTelefonneCislo.objects.exists():
+            raise ValidationError('Môže existovať iba jedna inštancia kontaktného telefónneho čísla.')
+        return super(KontaktneTelefonneCislo, self).save(*args, **kwargs)

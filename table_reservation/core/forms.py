@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from core.models import PovolenyCas, AdminEmail, Aktivita, Stav, NepovolenyDatum
+from core.models import PovolenyCas, AdminEmail, Aktivita, Stav, NepovolenyDatum, KontaktneTelefonneCislo
 
 class CreatePovolenyCasForm(ModelForm):
     class Meta:
@@ -39,3 +39,8 @@ class CreateNepovolenyDatumForm(ModelForm):
         widgets = {
             'datum': forms.DateInput(format=('%d.%m.%Y'), attrs={'class':'form-control', 'placeholder':'Vyberte nepovolený dátum', 'type':'date'}),
         }
+
+class CreateKontaktneTelefonneCisloForm(ModelForm):
+    class Meta:
+        model = KontaktneTelefonneCislo
+        fields = "__all__"

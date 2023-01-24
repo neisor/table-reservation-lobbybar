@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from reservations.helpers import *
-from core.models import Reservation, PovolenyCas, AdminEmail, Aktivita, Stav
+from core.models import Reservation, PovolenyCas, AdminEmail, Aktivita, KontaktneTelefonneCislo
 import uuid
 from django.core.paginator import Paginator
 from core.wrappers import allow_only_if_is_open
@@ -28,8 +28,10 @@ def create_new_reservation(request):
         if form.is_valid():
             date_of_new_reservation = form.cleaned_data["datum"]
             if check_if_datum_from_reservation_is_in_nepovolene_datumy(date_to_check=date_of_new_reservation):
+                kontaktne_tel_cislo = KontaktneTelefonneCislo.objects.all().first()
                 messages.error(request, mark_safe(
-                    f'Je nám ľúto, v tento deň už nie je možná rezervácia, z dôvodu naplnenia kapacity rezervácií. Kontaktujte nás na čísle: <a href="tel:+421 908 085 888">+421 908 085 888</a>'
+                    f"""Je nám ľúto, v tento deň už nie je možná rezervácia, z dôvodu naplnenia kapacity rezervácií. 
+                    Kontaktujte nás na čísle: <a href="tel:{kontaktne_tel_cislo.telefonne_cislo if kontaktne_tel_cislo else ''}">{kontaktne_tel_cislo.telefonne_cislo if kontaktne_tel_cislo else ''}</a>"""
                     )
                 )
                 return redirect('/')

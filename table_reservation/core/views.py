@@ -263,3 +263,42 @@ def delete_nepovoleny_datum(request, nepovoleny_datum_id: int):
     nepovoleny_datum.delete()
     messages.success(request, f'Nepovolený dátum {nepovoleny_datum.datum} s ID {nepovoleny_datum_id} bol úspešne vymazaný.')
     return redirect("all_nepovolene_datumy")
+
+
+@login_required
+def create_new_kontaktne_cislo(request):
+    if request.method == "GET":
+        context = {
+            'form': CreateKontaktneTelefonneCisloForm,
+        }
+        return render(request, 'core/create_new_kontaktne_cislo.html', context=context)
+    if request.method == "POST":
+        form = CreateKontaktneTelefonneCisloForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Úspešne ste vytvorili nové kontaktné telefónne číslo.")
+        else:
+            messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
+            context = {
+                "form": form
+            }
+            return render(request, 'core/create_new_kontaktne_cislo.html', context=context)
+        return redirect("all_kontaktne_cisla")
+
+@login_required
+def all_kontaktne_cisla(request):
+    kontaktne_cisla = KontaktneTelefonneCislo.objects.all()
+    context = {
+        "kontaktne_cisla": kontaktne_cisla
+    }
+    return render(request, 'core/all_kontaktne_cisla.html', context=context)
+
+@login_required
+def delete_kontaktne_cislo(request, kontaktne_cislo_id: int):
+    kontaktne_cislo = KontaktneTelefonneCislo.objects.all().filter(id=kontaktne_cislo_id).first()
+    if not kontaktne_cislo:
+        messages.warning(request, f'Kontaktné telefónne číslo s ID {kontaktne_cislo_id} neexistuje.')
+        return redirect("all_kontaktne_cisla")
+    kontaktne_cislo.delete()
+    messages.success(request, f'Kontaktné telefónne číslo {kontaktne_cislo.telefonne_cislo} s ID {kontaktne_cislo_id} bolo úspešne vymazaný.')
+    return redirect("all_kontaktne_cisla")

@@ -19,4 +19,7 @@ urlpatterns = [
     path('nepovoleny-datum/create', create_new_nepovoleny_datum, name="create_new_nepovoleny_datum"),
     path('nepovoleny-datum/all', all_nepovolene_datumy, name="all_nepovolene_datumy"),
     path('nepovoleny-datum/delete/<int:nepovoleny_datum_id>', delete_nepovoleny_datum, name="delete_nepovoleny_datum"),
+    path('kontaktne-cislo/create', create_new_kontaktne_cislo, name="create_new_kontaktne_cislo"),
+    path('kontaktne-cislo/all', all_kontaktne_cisla, name="all_kontaktne_cisla"),
+    path('kontaktne-cislo/delete/<int:kontaktne_cislo_id>', delete_kontaktne_cislo, name="delete_kontaktne_cislo"),
 ]

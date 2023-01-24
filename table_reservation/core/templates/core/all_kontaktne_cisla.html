@@ -1,0 +1,38 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Všetky kontaktné telefónne čísla</h1>
+
+    {% if not kontaktne_cisla %}
+        <h5 class="text-center text-danger">Zatiaľ neexistuje žiadne kontaktné telefónne číslo.</h5>
+    {% else %}
+        <div class="container-fluid">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>Číslo</th>
+                        <th>Vymazať</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for kontaktne_cislo in kontaktne_cisla %}
+                            <tr>
+                                <td>{{ kontaktne_cislo.id }}</td>
+                                <td>{{ kontaktne_cislo.telefonne_cislo }}</td>
+                                <td>
+                                    <a href="{% url 'delete_kontaktne_cislo' kontaktne_cislo.id %}">
+                                        <button class="btn btn-danger">
+                                            Vymazať
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
