@@ -86,8 +86,8 @@ def all_admin_emaily(request):
 @login_required
 def create_new_admin_email(request):
     if request.method == "GET":
-        povoleny_cas = AdminEmail.objects.all().first()
-        if povoleny_cas:
+        admin_email = AdminEmail.objects.all().first()
+        if admin_email:
             messages.warning(request, 'Administrátorský e-mail už existuje, nemôžete vytvoriť ďalší.')
             return redirect("all_admin_emaily")
         context = {
