@@ -48,3 +48,10 @@ class EditPoznamkaAdministratora(ModelForm):
     class Meta:
         model = Reservation
         fields = ['poznamka_administratora']
+
+class FilterReservationsByDateForm(forms.Form):
+    datum = forms.DateField(
+        widget=forms.DateInput(
+            format=('%d.%m.%Y'), attrs={'class':'form-control', 'placeholder':'Vyberte dátum', 'type':'date'}
+        )
+    )

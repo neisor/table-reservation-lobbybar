@@ -134,6 +134,26 @@ def all_reservations(request):
         }
     return render(request, 'reservations/all_reservations.html', context=context)
 
+@login_required
+def all_reservations_for_a_specific_date(request):
+    if request.method == "GET":
+        context = {
+            "form": FilterReservationsByDateForm
+        }
+        return render(request, "reservations/all_reservations_filter_by_date_form.html", context=context)
+    if request.method == "POST":
+        form = FilterReservationsByDateForm(request.POST)
+        if form.is_valid():
+            filter_date = form.cleaned_data["datum"]
+            all_reservations_for_a_date = Reservation.objects.all().filter(datum=filter_date)
+            context = {
+                "filter_date": filter_date,
+                "all_reservations_for_a_date": all_reservations_for_a_date
+            }
+            return render(request, "reservations/all_reservations_for_a_specific_date.html", context=context)
+        else:
+            messages.warning(request, f"Nezadali ste dátum v správnom formáte prípadne ste nezadali žiaden dátum na filtrovanie.")
+            return redirect("all_reservations_for_a_specific_date")
 
 @login_required
 def edit_or_show_poznamka_administratora(request, reservation_uuid4: uuid.UUID):

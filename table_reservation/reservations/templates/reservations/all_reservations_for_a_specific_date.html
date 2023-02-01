@@ -1,27 +1,11 @@
 {% extends "core/base.html" %}
 {% block content %}
-    <h1 class="text-center">Všetky rezervácie</h1>
-
-    <div class="container kontajner mt-3">
-        <form id="search_form" method="GET">
-            <input type="search" id="search" class="form-control" name="search" placeholder="Vyhľadávanie">
-            <div class="d-flex justify-content-center">
-                <button class="btn btn-success mt-2 mb-3" type="submit" form="search_form">Vyhľadať</button>
-            </div>
-        </form>
-    </div>
-    
-    <div class="container text-center">
-        <a href="{% url 'all_reservations_for_a_specific_date' %}">
-            <button class="btn btn-info">Prejsť na filtrovanie rezervácii podľa dátumu</button>
-        </a>
-    </div>
+    <h1 class="text-center">Všetky rezervácie pre deň {{ filter_date }}</h1>
 
     <div class="container-fluid">
-        {% if not all_reservations %}
-            <h5 class="text-center text-danger mt-4">Neexistuje žiadna rezervácia.</h5>
+        {% if not all_reservations_for_a_date %}
+            <h5 class="text-center text-danger mt-4">Neexistuje žiadna rezervácia pre daný deň.</h5>
             <p class="text-center">
-                Skontrolujte si či nevyhľadávate rezerváciu, ktorá neexistuje.<br/>
                 Prejsť na <a href="{% url 'all_reservations' %}">všetky rezervácie bez filtrovania</a>.
             </p>
         {% else %}
@@ -49,7 +33,7 @@
                         </tr>
                     </thead>
                     <tbody>        
-                        {% for reservation in all_reservations %}
+                        {% for reservation in all_reservations_for_a_date %}
                             <tr>
                                 <td>
                                     {% if reservation.stav == "PRIJATA" %}
@@ -127,32 +111,6 @@
                     </tbody>
                 </table>
             </div>
-
-        <div class="pagination">
-            <span class="step-links">
-                <!-- If paginator object exists, show the links to navigate between pages and the show all entries button -->
-                {% if page_obj %}
-                    {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo; Prvá</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">Predchádzajúca</a>
-                    {% endif %}
-                    <span class="current">
-                        || <b>Strana {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}</b> ||
-                    </span>
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">Ďalšia</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">Posledná &raquo;</a>
-                    {% endif %}
-                    <span class="text-muted"><br />Zobrazených {{ number_of_reservations_per_page }} položiek na stranu</span>
-                    <span><br /><a href="?zobrazitVsetko=true" class="btn btn-outline-primary mt-2">Zobraziť všetky</a></span>
-                {% else %}
-                    <!-- Else show link to return to the 1st page (because all of the entries are being displayed) -->
-                    <span class="current">
-                        <a href="?page=1" class="btn btn-outline-primary mt-2">&laquo; Zobraziť po stranách</a>
-                    </span>
-                {% endif %}
-            </span>
-        </div>
 
     {% endif %}
 
