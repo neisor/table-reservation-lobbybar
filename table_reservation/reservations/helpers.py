@@ -1,5 +1,5 @@
 from django.core.mail import send_mail
-from core.models import Reservation, AdminEmail, NepovolenyDatum
+from core.models import Reservation, AdminEmail, NepovolenyDatum, KontaktneTelefonneCislo
 from django.urls import reverse
 from typing import Union
 import datetime
@@ -149,6 +149,12 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
 
 
 def notify_customer_about_accepted_or_declined_reservation(reservation: Reservation) -> None:
+    kontaktne_cislo = KontaktneTelefonneCislo.objects.all().first()
+    if kontaktne_cislo:
+        contact_tel_number = kontaktne_cislo.telefonne_cislo
+    else:
+        contact_tel_number = "+421 xxx xxx xxx"  # Just in cases when no KontaktneTelefonneCislo has been created yet
+
     if reservation.stav == Reservation.Stavy.PRIJATA:
         subject = "El Nacional - Rezervácia prijatá"
         message_text = "Tvoja rezervácia bola PRIJATÁ!"
@@ -183,7 +189,7 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     E-mail: {reservation.email}
     Správa: {reservation.sprava if reservation.sprava else '-'}
 
-    V prípade akéhokoľvek problému nás, prosím, kontaktujte na tel. čísle: +421 903 470 561
+    V prípade akéhokoľvek problému nás, prosím, kontaktujte na tel. čísle: {contact_tel_number}
 
     {signature_text}
     Muchas gracias!
@@ -206,7 +212,7 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     <b>E-mail:</b> {reservation.email}<br/>
     <b>Správa:</b> {reservation.sprava if reservation.sprava else '-'}<br/><br/>
 
-    V prípade akéhokoľvek problému nás, prosím, kontaktujte na tel. čísle: <a href="tel:+421903470561">+421 903 470 561</a><br/><br/>
+    V prípade akéhokoľvek problému nás, prosím, kontaktujte na tel. čísle: <a href="tel:{contact_tel_number}">{contact_tel_number}</a><br/><br/>
 
     {signature_html_text}<br/>
     <b>Muchas gracias!</b><br/><br/>
