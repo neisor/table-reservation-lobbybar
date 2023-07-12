@@ -42,6 +42,14 @@ def input_initial_date_for_new_reservation(request):
         
 @allow_only_if_is_open
 def create_new_reservation(request):
+    povoleny_cas = PovolenyCas.objects.exists()
+    admin_email = AdminEmail.objects.exists()
+    aktivita = Aktivita.objects.exists()
+    context = {
+        'povoleny_cas': povoleny_cas,
+        'admin_email': admin_email,
+        'aktivita': aktivita
+    }
     if request.method == "GET":
         return redirect(to="input_initial_date_for_new_reservation")
     if request.method == "POST":
@@ -62,9 +70,7 @@ def create_new_reservation(request):
             messages.success(request, "Úspešne ste vytvorili novú rezerváciu. Je potrebné aby ste potvrdili rezerváciu na Vami zadanej e-mailovej adrese.")
         else:
             messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
-            context = {
-                "form": form
-            }
+            context["form"] = form
             return render(request, 'reservations/create_new_reservation.html', context=context)
         generate_and_send_new_reservation_email_to_customer(request=request, reservation=created_reservation)
         return redirect("/")
