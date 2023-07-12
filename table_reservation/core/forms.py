@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from core.models import PovolenyCas, AdminEmail, Aktivita, Stav, NepovolenyDatum, KontaktneTelefonneCislo
+from core.models import PovolenyCas, AdminEmail, Aktivita, Stav, NepovolenyDatum, KontaktneTelefonneCislo, NepovolenaAktivitaNaDatum
 
 class CreatePovolenyCasForm(ModelForm):
     class Meta:
@@ -44,3 +44,12 @@ class CreateKontaktneTelefonneCisloForm(ModelForm):
     class Meta:
         model = KontaktneTelefonneCislo
         fields = "__all__"
+
+class CreateNepovolenaAktivitaNaDatumForm(ModelForm):
+    class Meta:
+        model = NepovolenaAktivitaNaDatum
+        fields = "__all__"
+        widgets = {
+            'datum': forms.DateInput(format=('%d.%m.%Y'), attrs={'class':'form-control', 'placeholder':'Vyberte dátum pre ktorý chcete danú aktivitu zakázať', 'type':'date'}),
+        }
+        

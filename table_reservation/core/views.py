@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from core.forms import *
-from core.models import PovolenyCas, AdminEmail, Aktivita, Stav
+from core.models import PovolenyCas, AdminEmail, Aktivita, Stav, NepovolenaAktivitaNaDatum
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from core.helpers import *
@@ -306,3 +306,50 @@ def delete_kontaktne_cislo(request, kontaktne_cislo_id: int):
     kontaktne_cislo.delete()
     messages.success(request, f'Kontaktné telefónne číslo {kontaktne_cislo.telefonne_cislo} s ID {kontaktne_cislo_id} bolo úspešne vymazaný.')
     return redirect("all_kontaktne_cisla")
+
+@login_required
+def create_new_nepovolena_aktivita_pre_datum(request):
+    if request.method == "GET":
+        # Render the form
+        form = CreateNepovolenaAktivitaNaDatumForm()
+        context = {
+            'form': form,
+        }
+        return render(request, 'core/create_new_nepovolena_aktivita_pre_datum.html', context=context)
+    if request.method == "POST":
+        # Validate form and save it to database
+        form = CreateNepovolenaAktivitaNaDatumForm(request.POST)
+        if form.is_valid():
+            # Check if another instance with the same data already exists
+            if not NepovolenaAktivitaNaDatum.objects.filter(datum=form.cleaned_data['datum'], aktivita=form.cleaned_data["aktivita"]).exists():
+                form.save()
+                messages.success(request, "Úspešne ste vytvorili nový nepovolený dátum.")
+            else:
+                messages.warning(request, "Rovnaká nepovolená aktivita na rovnaký dátum už existuje.")
+                return redirect("all_nepovolene_aktivity_pre_datumy")
+        else:
+            messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
+            context = {
+                "form": form
+            }
+            return render(request, 'core/create_new_nepovolena_aktivita_pre_datum.html', context=context)
+        return redirect("all_nepovolene_aktivity_pre_datumy")
+
+
+@login_required
+def all_nepovolene_aktivity_pre_datumy(request):
+    nepovolene_aktivity_pre_datumy = NepovolenaAktivitaNaDatum.objects.all().order_by('-datum')
+    context = {
+        "nepovolene_aktivity_pre_datumy": nepovolene_aktivity_pre_datumy
+    }
+    return render(request, 'core/all_nepovolene_aktivity_pre_datumy.html', context=context)
+
+@login_required
+def delete_nepovolena_aktivita_pre_datum(request, nepovolena_aktivita_pre_datum_id: int):
+    nepovolena_aktivita_pre_datum = NepovolenaAktivitaNaDatum.objects.all().filter(id=nepovolena_aktivita_pre_datum_id).first()
+    if not nepovolena_aktivita_pre_datum:
+        messages.warning(request, f'Nepovolená aktivita s ID {nepovolena_aktivita_pre_datum_id} neexistuje.')
+        return redirect("all_nepovolene_aktivity_pre_datumy")
+    nepovolena_aktivita_pre_datum.delete()
+    messages.success(request, f'Nepovolená aktivita {nepovolena_aktivita_pre_datum.aktivita.nazov} pre dátum {nepovolena_aktivita_pre_datum.datum} s ID {nepovolena_aktivita_pre_datum_id} bola úspešne vymazaná.')
+    return redirect("all_nepovolene_aktivity_pre_datumy")

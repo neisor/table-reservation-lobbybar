@@ -109,3 +109,11 @@ class KontaktneTelefonneCislo(models.Model):
         if not self.pk and KontaktneTelefonneCislo.objects.exists():
             raise ValidationError('Môže existovať iba jedna inštancia kontaktného telefónneho čísla.')
         return super(KontaktneTelefonneCislo, self).save(*args, **kwargs)
+
+class NepovolenaAktivitaNaDatum(models.Model):
+    aktivita = models.ForeignKey(to='Aktivita', on_delete=models.CASCADE, verbose_name="Nepovolená aktivita")
+    datum = models.DateField(verbose_name="Dátum pre nepovolenú aktivitu")
+
+    def __str__(self):
+        return f"Nepovolená aktivita: {self.aktivita.nazov} / Dátum: {self.datum}"
+    

@@ -1,8 +1,15 @@
 from django.core.mail import send_mail
-from core.models import Reservation, AdminEmail, NepovolenyDatum, KontaktneTelefonneCislo
+from core.models import Reservation, AdminEmail, NepovolenyDatum, KontaktneTelefonneCislo, Aktivita, NepovolenaAktivitaNaDatum
 from django.urls import reverse
 from typing import Union
 import datetime
+
+def get_available_aktivity_for_today():
+    """Gets all of the available Aktivita instances for today."""
+    now_date = datetime.datetime.now().date()
+    not_allowed_ids_of_activities_for_today = NepovolenaAktivitaNaDatum.objects.filter(datum=now_date).values_list('aktivita__id', flat=True)
+    allowed_activities_for_today = Aktivita.objects.exclude(id__in=not_allowed_ids_of_activities_for_today)
+    return allowed_activities_for_today
 
 def check_if_datum_from_reservation_is_in_nepovolene_datumy(date_to_check: datetime.date) -> bool:
     """Returns True (boolean) if date exists in NepovolenyDatum - therefore the reservation should not be created"""

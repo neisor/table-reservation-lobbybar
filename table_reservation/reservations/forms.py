@@ -1,8 +1,10 @@
 from django.forms import ModelForm, ValidationError
 from django import forms
-from core.models import Reservation, PovolenyCas
+from core.models import Reservation, PovolenyCas, NepovolenaAktivitaNaDatum, Aktivita
 import datetime
 from django.utils.safestring import mark_safe
+from reservations.helpers import get_available_aktivity_for_today
+
 
 class CreateReservationForm(ModelForm):
     privacy_policy = forms.BooleanField()
@@ -21,6 +23,14 @@ class CreateReservationForm(ModelForm):
         self.fields['privacy_policy'].label = mark_safe(
             'Súhlasím so <a href="https://elnacional.sk/ochrana-osobnych-udajov">spracovaním osobných údajov</a>'
         )
+        # Show only available Aktivity options (Aktivity which are not in NepovolenaAktivitaNaDatum)
+        allowed_activities_for_today = get_available_aktivity_for_today()
+        if not allowed_activities_for_today:
+            self.fields["aktivita"].help_text = """
+            <b>Aktuálne nie sú k dispozícii žiadne možnosti ako stráviť večer u nás.</b><br/>
+            Pre viac informácií kontaktujte prevádzkara/ku.
+            """
+        self.fields["aktivita"].queryset = allowed_activities_for_today
 
     def clean(self):
         cleaned_data = super().clean()

@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Nová nepovolená aktivita pre konkrétny dátum</h1>
+
+    <div class="container-lg">
+        {% load crispy_forms_tags %}
+        <form action="{% url 'create_new_nepovolena_aktivita_pre_datum' %}" id="create_new_nepovolena_aktivita_pre_datum_form" method="POST" enctype="multipart/form-data">
+            {% crispy form %}
+        </form>
+        <button class="btn btn-success mt-3 mx-auto" type="submit" form="create_new_nepovolena_aktivita_pre_datum_form">Vytvoriť novú nepovolenú aktivitu pre konkrétny dátum</button>
+    </div>
+
+{% endblock %}

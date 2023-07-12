@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <h1 class="text-center">Všetky nepovolené aktivity pre dátumy</h1>
+    <h5 class="text-center">Ak neostane povolená aspoň jedna aktivita pre konkrétny deň, zákazníci si nebudú môcť vytvoriť žiadnu rezerváciu pre daný deň.</h5>
+
+    {% if not nepovolene_aktivity_pre_datumy %}
+        <h5 class="text-center text-danger">Zatiaľ neexistujú žiadne nepovolené aktivity pre dátumy.</h5>
+    {% else %}
+        <div class="container-fluid">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>Nepovolená ktivita</th>
+                        <th>Dátum</th>
+                        <th>Vymazať</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for nepovolena_aktivita in nepovolene_aktivity_pre_datumy %}
+                            <tr>
+                                <td>{{ nepovolena_aktivita.id }}</td>
+                                <td>{{ nepovolena_aktivita.aktivita.nazov }}</td>
+                                <td>{{ nepovolena_aktivita.datum }}</td>
+                                <td>
+                                    <a href="{% url 'delete_nepovolena_aktivita_pre_datum' nepovolena_aktivita.id %}">
+                                        <button class="btn btn-danger">
+                                            Vymazať
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

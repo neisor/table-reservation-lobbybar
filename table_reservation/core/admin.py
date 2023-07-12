@@ -1,9 +1,9 @@
 from django.contrib import admin
-from core.models import Reservation, Aktivita, AdminEmail, PovolenyCas, Stav
+from core.models import Reservation, Aktivita, AdminEmail, PovolenyCas, Stav, NepovolenaAktivitaNaDatum
 
-# Register your models here.
 admin.site.register(Reservation)
 admin.site.register(Aktivita)
 admin.site.register(AdminEmail)
 admin.site.register(PovolenyCas)
 admin.site.register(Stav)
+admin.site.register(NepovolenaAktivitaNaDatum)
