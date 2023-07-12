@@ -1,13 +1,15 @@
 from django.core.mail import send_mail
 from core.models import Reservation, AdminEmail, NepovolenyDatum, KontaktneTelefonneCislo, Aktivita, NepovolenaAktivitaNaDatum
 from django.urls import reverse
-from typing import Union
 import datetime
+from django.db.models import QuerySet
 
-def get_available_aktivity_for_today():
+def get_available_aktivity_for_a_date(date: datetime.date) -> QuerySet:
     """Gets all of the available Aktivita instances for today."""
-    now_date = datetime.datetime.now().date()
-    not_allowed_ids_of_activities_for_today = NepovolenaAktivitaNaDatum.objects.filter(datum=now_date).values_list('aktivita__id', flat=True)
+    if isinstance(date, str):
+        # Convert to datetime.date
+        date = datetime.datetime.strptime(date, '%d.%m.%Y').date()
+    not_allowed_ids_of_activities_for_today = NepovolenaAktivitaNaDatum.objects.filter(datum=date).values_list('aktivita__id', flat=True)
     allowed_activities_for_today = Aktivita.objects.exclude(id__in=not_allowed_ids_of_activities_for_today)
     return allowed_activities_for_today
 

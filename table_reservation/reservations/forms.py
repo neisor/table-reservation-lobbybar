@@ -3,8 +3,16 @@ from django import forms
 from core.models import Reservation, PovolenyCas, NepovolenaAktivitaNaDatum, Aktivita
 import datetime
 from django.utils.safestring import mark_safe
-from reservations.helpers import get_available_aktivity_for_today
+from reservations.helpers import get_available_aktivity_for_a_date
 
+class DateInputForReservationForm(forms.Form):
+    datum = forms.DateField(widget=forms.DateInput(format=('%d.%m.%Y'), attrs={'class':'form-control', 'placeholder':'Vyberte dátum', 'type':'date'}))
+    widgets = {
+        'datum': forms.DateInput(format=('%d.%m.%Y'), attrs={'class':'form-control', 'placeholder':'Vyberte dátum', 'type':'date'}),
+    }
+    def __init__(self, *args, **kwargs):
+        super(DateInputForReservationForm, self).__init__(*args, **kwargs)
+        self.fields['datum'].label = 'Vyberte si dátum rezervácie'
 
 class CreateReservationForm(ModelForm):
     privacy_policy = forms.BooleanField()
@@ -12,25 +20,28 @@ class CreateReservationForm(ModelForm):
         model = Reservation
         exclude = ('uuid_identificator', 'stav', 'poznamka_administratora')
         widgets = {
-            'datum': forms.DateInput(format=('%d.%m.%Y'), attrs={'class':'form-control', 'placeholder':'Vyberte dátum', 'type':'date'}),
             'cas': forms.TimeInput(format=('%H:%M'), attrs={'class':'form-control', 'placeholder':'Vyberte čas', 'type':'time'}),
             'aktivita': forms.CheckboxSelectMultiple()
         }
 
     def __init__(self, *args, **kwargs):
+        datum = kwargs.pop('datum') if kwargs.get('datum') else None
         super(CreateReservationForm, self).__init__(*args, **kwargs)
         self.fields['aktivita'].label = 'Ako plánujete stráviť večer u nás?'
         self.fields['privacy_policy'].label = mark_safe(
             'Súhlasím so <a href="https://elnacional.sk/ochrana-osobnych-udajov">spracovaním osobných údajov</a>'
         )
-        # Show only available Aktivity options (Aktivity which are not in NepovolenaAktivitaNaDatum)
-        allowed_activities_for_today = get_available_aktivity_for_today()
-        if not allowed_activities_for_today:
-            self.fields["aktivita"].help_text = """
-            <b>Aktuálne nie sú k dispozícii žiadne možnosti ako stráviť večer u nás.</b><br/>
-            Pre viac informácií kontaktujte prevádzkara/ku.
-            """
-        self.fields["aktivita"].queryset = allowed_activities_for_today
+        if datum:
+            # Show only available Aktivity options for the selected date (Aktivity which are not in NepovolenaAktivitaNaDatum)
+            allowed_activities_for_today = get_available_aktivity_for_a_date(date=datum)
+            if not allowed_activities_for_today:
+                self.fields["aktivita"].help_text = """
+                <b>Aktuálne nie sú k dispozícii žiadne možnosti ako stráviť večer u nás pre tento konkrétny dátum.</b><br/>
+                Pre viac informácií kontaktujte prevádzkara/ku.
+                """
+            self.fields["aktivita"].queryset = allowed_activities_for_today
+            self.fields["datum"].initial = datetime.datetime.strftime(datum, '%d.%m.%Y') if not isinstance(datum, str) else datum
+            self.fields["datum"].disabled = True
 
     def clean(self):
         cleaned_data = super().clean()

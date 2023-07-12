@@ -11,20 +11,41 @@ from django.core.paginator import Paginator
 from core.wrappers import allow_only_if_is_open
 
 @allow_only_if_is_open
+def input_initial_date_for_new_reservation(request):
+    povoleny_cas = PovolenyCas.objects.exists()
+    admin_email = AdminEmail.objects.exists()
+    aktivita = Aktivita.objects.exists()
+    context = {
+        'povoleny_cas': povoleny_cas,
+        'admin_email': admin_email,
+        'aktivita': aktivita
+    }
+    
+    if request.method == "GET":
+        context["form"] = DateInputForReservationForm
+        return render(request, 'reservations/input_date_for_new_reservation.html', context=context)
+    
+    if request.method == "POST":
+        form = DateInputForReservationForm(request.POST)
+        if form.is_valid():
+            date_of_new_reservation = form.cleaned_data["datum"]
+            form = CreateReservationForm(datum=date_of_new_reservation)
+            request.session["datum"] = datetime.datetime.strftime(date_of_new_reservation, "%d.%m.%Y")
+            context["form"] = form
+            return render(request, 'reservations/create_new_reservation.html', context=context)
+        else:
+            messages.error(request, "Pri validácii dát, ktoré ste zadali, nastala chyba. Skúste to znovu.")
+            context = {
+                "form": form
+            }
+            return render(request, 'reservations/input_date_for_new_reservation.html', context=context)
+        
+@allow_only_if_is_open
 def create_new_reservation(request):
     if request.method == "GET":
-        povoleny_cas = PovolenyCas.objects.exists()
-        admin_email = AdminEmail.objects.exists()
-        aktivita = Aktivita.objects.exists()
-        context = {
-            'form': CreateReservationForm,
-            'povoleny_cas': povoleny_cas,
-            'admin_email': admin_email,
-            'aktivita': aktivita
-        }
-        return render(request, 'reservations/create_new_reservation.html', context=context)
+        return redirect(to="input_initial_date_for_new_reservation")
     if request.method == "POST":
-        form = CreateReservationForm(request.POST)
+        form = CreateReservationForm(request.POST, datum=request.session["datum"])
         if form.is_valid():
             date_of_new_reservation = form.cleaned_data["datum"]
             if check_if_datum_from_reservation_is_in_nepovolene_datumy(date_to_check=date_of_new_reservation):
