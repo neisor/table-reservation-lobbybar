@@ -1,6 +1,6 @@
 from django.forms import ModelForm, ValidationError
 from django import forms
-from core.models import Reservation, PovolenyCas, NepovolenaAktivitaNaDatum, Aktivita
+from core.models import Reservation, PovolenyCas, KontaktneTelefonneCislo
 import datetime
 from django.utils.safestring import mark_safe
 from reservations.helpers import get_available_aktivity_for_a_date
@@ -35,9 +35,10 @@ class CreateReservationForm(ModelForm):
             # Show only available Aktivity options for the selected date (Aktivity which are not in NepovolenaAktivitaNaDatum)
             allowed_activities_for_today = get_available_aktivity_for_a_date(date=datum)
             if not allowed_activities_for_today:
-                self.fields["aktivita"].help_text = """
+                kontaktne_tel_cislo = KontaktneTelefonneCislo.objects.all().first()
+                self.fields["aktivita"].help_text = f"""
                 <b>Aktuálne nie sú k dispozícii žiadne možnosti ako stráviť večer u nás pre tento konkrétny dátum.</b><br/>
-                Pre viac informácií kontaktujte prevádzkara/ku.
+                Pre viac informácií kontaktujte prevádzkara/ku na tel. č.: <a href="tel:{kontaktne_tel_cislo.telefonne_cislo if kontaktne_tel_cislo else ''}">{kontaktne_tel_cislo.telefonne_cislo if kontaktne_tel_cislo else ''}</a>
                 """
             self.fields["aktivita"].queryset = allowed_activities_for_today
             self.fields["datum"].initial = datetime.datetime.strftime(datum, '%d.%m.%Y') if not isinstance(datum, str) else datum
