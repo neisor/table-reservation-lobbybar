@@ -25,7 +25,8 @@ class CreateReservationForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        datum = kwargs.pop('datum') if kwargs.get('datum') else None
+        # datum variable will either be a datetime.date type when being rendered for the user to input, or, a string after the form is submitted and is being validated 
+        datum = kwargs.pop('datum') if kwargs.get('datum') else None  
         super(CreateReservationForm, self).__init__(*args, **kwargs)
         self.fields['aktivita'].label = 'Ako plánujete stráviť večer u nás?'
         self.fields['privacy_policy'].label = mark_safe(
