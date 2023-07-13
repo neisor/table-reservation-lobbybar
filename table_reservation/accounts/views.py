@@ -33,7 +33,7 @@ def login_user(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, "Boli ste úspešne prihlásený do objednávkového systému.")
+                messages.success(request, "Boli ste úspešne prihlásený do rezervačného systému.")
                 return redirect('create_new_reservation')
             else:
                 messages.error(request, "Neplatné prihlasovacie údaje. Skúste to znova.")
@@ -62,7 +62,7 @@ def logout_user(request):
 #         form = CustomUserCreationForm(data=request.POST)
 #         if form.is_valid():
 #             form.save()
-#             messages.success(request, "Boli ste úspešne zaregistrovaný do objednávkového systému. Teraz sa môžete prihlásiť.")
+#             messages.success(request, "Boli ste úspešne zaregistrovaný do rezervačného systému. Teraz sa môžete prihlásiť.")
 #             return redirect('login')
 #         else:
 #             messages.error(request, "Pri kontrole dát, ktoré ste zadali, nastala chyba. Dáta musia spĺňať popísané kritéria. Skúste to znovu.")
