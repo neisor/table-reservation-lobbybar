@@ -1,5 +1,5 @@
 # table-reservation
-Table reservation system for restaurants
+Table reservation system for Lobby bar
 
 # Initial setup
 To perform initial setup (create initial objects in the database) run:
