@@ -3,12 +3,14 @@
 <div class="container-fluid">
     <h1 class="text-center">Filtrovanie rezervácii podľa konkrétneho dátumu</h1>
 
-    {% load crispy_forms_tags %}
-    <form id="filter_reservations_by_date_form" method="POST" enctype="multipart/form-data">
-        {% crispy form %}
-    </form>
-    <div class="container text-center">
-        <button class="btn btn-success mt-3" type="submit" form="filter_reservations_by_date_form">Vyfiltrovať rezervácie podľa dátumu</button>
+    <div class="kontajner mx-auto">
+        {% load crispy_forms_tags %}
+        <form id="filter_reservations_by_date_form" method="POST" enctype="multipart/form-data">
+            {% crispy form %}
+        </form>
+        <div class="container text-center">
+            <button class="btn btn-success mt-3" type="submit" form="filter_reservations_by_date_form">Vyfiltrovať rezervácie podľa dátumu</button>
+        </div>
     </div>
 </div>
 {% endblock %}
