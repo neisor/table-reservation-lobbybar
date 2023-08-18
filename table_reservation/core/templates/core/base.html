@@ -24,11 +24,11 @@
             }
 
             #footer_zerumone a {
-              color: rgb(255, 255, 255);
+              color: rgb(0, 0, 0);
               text-decoration: none;
             }
             .kontajner {
-              max-width: 1000px;
+              max-width: 700px;
             }
             {% block extra_style %}
             {% endblock %}
@@ -48,11 +48,11 @@
                     <a class="nav-link active" aria-current="page" href="{% url 'input_initial_date_for_new_reservation' %}">Nová rezervácia</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="https://elnacional.sk"><span class="bi bi-link-45deg"></span>Web</a>
+                    <a class="nav-link" aria-current="page" href="https://elnacional.sk"><span class="bi bi-box-arrow-up-right"></span> Web</a>
                   </li>
                   <li class="nav-item">
                     {% if not user.is_authenticated %}
-                      <a class="nav-link" href="{% url 'login' %}">Prihlásiť sa</a>
+                      <a class="nav-link" href="{% url 'login' %}">Prihlásenie správcu</a>
                     {% else %}
                       <a class="nav-link" href="{% url 'logout' %}">Odhlásiť sa</a>
                     {% endif %}
@@ -110,8 +110,8 @@
           {% endblock %}
         </div>
         <!-- FOOTER -->
-        <div class="container-fluid text-center mt-3" id="footer_zerumone" style="height: 100px; background-color: #32516D;">
-          <h5 class="text-white align-middle p-4">Created with ❤ by <a href="https://zerumone.sk">ZerumOne | Weby, programovanie, marketing a IT služby</a></h5>
+        <div class="container-fluid text-center mt-3" id="footer_zerumone" style="height: 100px; background-color: #E4D1B7;">
+          <h5 class="text-black align-middle p-4">Created with 💖 by <a href="https://zerumone.sk">ZerumOne | Weby, programovanie, marketing a IT služby</a></h5>
         </div>
 
         <!-- EXTRA SCRIPTS IN THE BODY -->
