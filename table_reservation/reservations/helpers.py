@@ -31,7 +31,7 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     plain_text_message = f"""
     Hola Amigo!
 
-    Sme radi, že si sa rozhodol stráviť večer s nami v EL NACIONAL!
+    Sme radi, že si sa rozhodol stráviť večer s nami v Lobby Bar!
 
     Nezabudni potvrdiť svoju rezerváciu kliknutím na nasledujúci odkaz, inak bude tvoja rezervácia neplatná:
     {url_to_confirm_reservation}
@@ -52,12 +52,12 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     Ďakujeme!
     Muchas gracias!
 
-    Tím El Nacional
+    Tím Lobby Bar
     """
     html_message = f"""
     <b>Hola Amigo!</b><br/><br/>
 
-    Sme radi, že si sa rozhodol stráviť večer s nami v <b>EL NACIONAL</b>!<br/><br/>
+    Sme radi, že si sa rozhodol stráviť večer s nami v <b>Lobby Bar</b>!<br/><br/>
 
     <b>Nezabudni potvrdiť svoju rezerváciu kliknutím na nasledujúci odkaz, inak bude tvoja rezervácia neplatná:</b><br/>
     <a href="{url_to_confirm_reservation}">{url_to_confirm_reservation}</a><br/><br/>
@@ -78,12 +78,12 @@ def generate_and_send_new_reservation_email_to_customer(request, reservation: Re
     Ďakujeme!<br/>
     <b>Muchas gracias!</b><br/><br/>
 
-    <i>Tím El Nacional</i>
+    <i>Tím Lobby Bar</i>
     """
     admin_email = AdminEmail.objects.all().first()
     if admin_email:
         send_mail(
-            subject='El Nacional - Potvrďťe Vašu rezerváciu',
+            subject='Lobby Bar - Potvrďťe Vašu rezerváciu',
             message=plain_text_message,
             from_email=admin_email.email,
             recipient_list=[reservation.email],
@@ -147,7 +147,7 @@ def notify_administrator_to_accept_or_decline_reservation(request, reservation: 
     admin_email = AdminEmail.objects.all().first()
     if admin_email:
         send_mail(
-            subject=f'El Nacional - Nová rezervácia - ID: {reservation.id}',
+            subject=f'Lobby Bar - Nová rezervácia - ID: {reservation.id}',
             message=plain_text_message,
             from_email=admin_email.email,
             recipient_list=[admin_email.email],
@@ -165,13 +165,13 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
         contact_tel_number = "+421 xxx xxx xxx"  # Just in cases when no KontaktneTelefonneCislo has been created yet
 
     if reservation.stav == Reservation.Stavy.PRIJATA:
-        subject = "El Nacional - Rezervácia prijatá"
+        subject = "Lobby Bar - Rezervácia prijatá"
         message_text = "Tvoja rezervácia bola PRIJATÁ!"
         html_message_text = "Tvoja rezervácia bola <b>PRIJATÁ</b>!"
-        signature_html_text = "Ďakujeme, že si si vybral <b>EL NACIONAL</b>!"
-        signature_text = "Ďakujeme, že si si vybral EL NACIONAL!"
+        signature_html_text = "Ďakujeme, že si si vybral <b>Lobby Bar</b>!"
+        signature_text = "Ďakujeme, že si si vybral Lobby Bar!"
     else:
-        subject = "El Nacional - Rezervácia zamietnutá"
+        subject = "Lobby Bar - Rezervácia zamietnutá"
         message_text = """Mrzí nás to, ale tvoja rezervácia bola ZAMIETNUTÁ!
         Prosím, skontroluj detaily tvojej rezervácie a skúsime to spoločne napraviť!
         """
@@ -203,7 +203,7 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     {signature_text}
     Muchas gracias!
 
-    Tím El Nacional
+    Tím Lobby Bar
     """
     html_message = f"""
     Hola Amigo!<br/><br/>
@@ -226,7 +226,7 @@ def notify_customer_about_accepted_or_declined_reservation(reservation: Reservat
     {signature_html_text}<br/>
     <b>Muchas gracias!</b><br/><br/>
 
-    <i>Tím El Nacional</i>
+    <i>Tím Lobby Bar</i>
     """
     admin_email = AdminEmail.objects.all().first()
     if admin_email:

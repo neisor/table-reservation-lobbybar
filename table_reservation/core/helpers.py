@@ -13,7 +13,7 @@ def send_email_notification_system_closed_to_admin() -> None:
     admin_email = AdminEmail.objects.all().first()
     if admin_email:
         send_mail(
-            subject='El Nacional - Stav systému zmenený na ZATVORENÝ',
+            subject='Lobby Bar - Stav systému zmenený na ZATVORENÝ',
             message=plain_text_message,
             from_email=admin_email.email,
             recipient_list=[admin_email.email],
@@ -34,7 +34,7 @@ def send_email_notification_system_opened_to_admin() -> None:
     admin_email = AdminEmail.objects.all().first()
     if admin_email:
         send_mail(
-            subject='El Nacional - Stav systému zmenený na OTVORENÝ',
+            subject='Lobby Bar - Stav systému zmenený na OTVORENÝ',
             message=plain_text_message,
             from_email=admin_email.email,
             recipient_list=[admin_email.email],
