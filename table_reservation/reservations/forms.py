@@ -30,7 +30,7 @@ class CreateReservationForm(ModelForm):
         super(CreateReservationForm, self).__init__(*args, **kwargs)
         self.fields['aktivita'].label = 'Ako si želáte stráviť čas u nás?'
         self.fields['privacy_policy'].label = mark_safe(
-            'Súhlasím so <a href="https://elnacional.sk/ochrana-osobnych-udajov">spracovaním osobných údajov</a>'
+            'Súhlasím so <a href="https://lobbybar.sk/ochrana-osobnych-udajov">spracovaním osobných údajov</a>'
         )
         if datum:
             # Show only available Aktivity options for the selected date (Aktivity which are not in NepovolenaAktivitaNaDatum)
